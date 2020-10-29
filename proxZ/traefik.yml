@@ -1,0 +1,2 @@
+# print only error messages 
+debug = this should fail

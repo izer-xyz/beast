@@ -1,0 +1,15 @@
+FROM	ghcr.io/izer-xyz/oci-cli
+
+USER	root
+
+RUN	install_packages curl unzip vim-tiny jq
+RUN	curl -sS https://releases.hashicorp.com/vault/1.5.4/vault_1.5.4_linux_arm.zip -o /tmp/vault.zip \ 
+	&& unzip /tmp/vault.zip  -d /usr/local/bin \
+	&& rm /tmp/vault.zip
+
+COPY	configZ /configZ/
+COPY	logZ /configZ/logZ/
+COPY	proxZ /configZ/proxZ/	
+COPY	secretZ /configZ/secretZ/
+
+ENTRYPOINT [ "/configZ/entry.sh" ]

@@ -1,0 +1,4 @@
+find all templates and generate vault template config (configZ/entry.sh) 
+find all secrets and initialise secrets (configZ/init.sh)
+lock down traefik
+

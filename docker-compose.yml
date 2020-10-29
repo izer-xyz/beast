@@ -1,0 +1,91 @@
+version: '2'
+
+services:
+
+  configz:
+    build: .
+    restart: always
+    environment:
+      - VAULT_ADDR=http://secretz:8200
+    volumes:
+      - oci:/root/.oci
+      - logz:/logZ
+      - proxz:/proxZ
+      - secretz:/secretZ
+
+#  devz:
+#    build: .
+#    restart: always
+#    entrypoint: ["sh", "-c", "sh"]
+#    labels:
+#      - "traefik.enable=true"
+
+  proxz:
+    image: traefik
+    depends_on:
+      - secretz
+    restart: always
+    ports:
+      - 80:80 
+      - 443:443
+      - 8080:8080
+    environment:
+      - CF_DNS_API_TOKEN_FILE=/etc/traefik/CF_DNS_API_TOKEN
+    volumes:
+      - proxz:/etc/traefik:ro
+    labels:
+      io.balena.features.balena-socket: '1'
+      traefik.enable: true
+      traefik.http.routers.api.service: 'api@internal'
+
+  logz:
+    image: fluent/fluent-bit
+    depends_on:
+      - secretz
+    restart: always 
+    entrypoint: ["/logz/entry.sh"]
+    volumes:
+      - logz:/logz:ro
+    labels:
+      io.balena.features.balena-socket: '1'
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.firmware: '1'
+      io.balena.features.dbus: '1'
+      io.balena.features.sysfs: '1'
+      io.balena.features.procfs: '1'
+      io.balena.features.supervisor-api: '1'
+      io.balena.features.balena-api: '1'
+
+  secretz:
+    image: vault
+    depends_on:
+      - configz
+    restart: always
+    command: ["server"]
+    environment:
+      - VAULT_ADDR=http://secretz:8200
+      - VAULT_API_ADDR=http://secretz:8200
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - oci:/home/vault/.oci:ro
+      - vault:/vault/file
+      - secretz:/vault/config
+    labels:
+      traefik.enable: true
+
+volumes:
+  oci:
+  vault:
+  secretz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  proxz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  logz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
