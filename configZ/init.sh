@@ -33,7 +33,7 @@ if [ ! $VAULT_TOKEN ]; then
   vault secrets enable -path=env kv-v2
 
   echo wait little...
-  sleep 5
+  sleep 10
 fi
 
 ROLEID=$BALENA_DEVICE_UUID
@@ -61,5 +61,6 @@ vault kv put env/$ROLE/proxz \
 	DOMAIN_EMAIL="$DOMAIN_EMAIL" \
 	CF_DNS_API_TOKEN="$CF_DNS_API_TOKEN"
 
+echo $MY_VAULT_INIT
 echo Init done time to reboot...
 # reboot
