@@ -98,7 +98,7 @@ volumes:
       type: tmpfs
       device: tmpfs
   unifi:
-  unifi-logs:
+  unifi-log:
     driver_opts:
       type: tmpfs
       device: tmpfs
