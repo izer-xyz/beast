@@ -28,7 +28,6 @@ services:
     ports:
       - 80:80 
       - 443:443
-      - 8080:8080
     environment:
       - CF_DNS_API_TOKEN_FILE=/etc/traefik/CF_DNS_API_TOKEN
     volumes:
@@ -71,7 +70,7 @@ services:
   unifi:
     build: ./unifi
     restart: no
-    user: 8000:0
+#    user: 8000:0
     ports:
       - 8080:8080
     volumes:

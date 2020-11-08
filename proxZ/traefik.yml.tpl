@@ -29,8 +29,7 @@ certificatesResolvers:
   cloudflare:
     acme:
       email: {{ with printf "env/%s/proxz" (env "BALENA_APP_NAME") | secret }}{{ .Data.data.DOMAIN_EMAIL }}{{ end }}
-      storage: /etc/acme.json
-#      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      storage: /etc/certz/acme.json
       dnsChallenge:
         provider: cloudflare
         resolvers:
