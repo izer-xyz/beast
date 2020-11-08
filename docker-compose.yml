@@ -33,6 +33,7 @@ services:
       - CF_DNS_API_TOKEN_FILE=/etc/traefik/CF_DNS_API_TOKEN
     volumes:
       - proxz:/etc/traefik:ro
+      - certz:/etc/certz
     labels:
       io.balena.features.balena-socket: '1'
       traefik.enable: true
@@ -47,14 +48,7 @@ services:
     volumes:
       - logz:/logz:ro
     labels:
-      io.balena.features.balena-socket: '1'
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.firmware: '1'
-      io.balena.features.dbus: '1'
-      io.balena.features.sysfs: '1'
-      io.balena.features.procfs: '1'
       io.balena.features.supervisor-api: '1'
-      io.balena.features.balena-api: '1'
 
   secretz:
     image: vault
@@ -74,6 +68,19 @@ services:
     labels:
       traefik.enable: true
 
+  unifi:
+    build: ./unifi
+    restart: no
+    user: 8000:0
+    ports:
+      - 8080:8080
+    volumes:
+      - unifi:/usr/lib/unifi/data
+      - unifi-log:/usr/lib/unifi/logs
+    labels:
+      traefik.enable: true
+      traefik.http.services.unifi.loadbalancer.server.port: 8000
+
 volumes:
   oci:
   vault:
@@ -81,6 +88,7 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  certz:
   proxz:
     driver_opts:
       type: tmpfs
@@ -89,3 +97,9 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  unifi:
+  unifi-logs:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
