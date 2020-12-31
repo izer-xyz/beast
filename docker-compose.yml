@@ -21,7 +21,7 @@ services:
 #      - "traefik.enable=true"
 
   proxz:
-    image: traefik
+    image: traefik:2.3.6
     depends_on:
       - secretz
     restart: always
@@ -39,7 +39,7 @@ services:
       traefik.http.routers.api.service: 'api@internal'
 
   logz:
-    image: fluent/fluent-bit
+    image: fluent/fluent-bit:1.6.7
     depends_on:
       - secretz
     restart: always 
@@ -50,7 +50,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault
+    image: vault:1.6.1
     depends_on:
       - configz
     restart: always
@@ -80,6 +80,32 @@ services:
       traefik.enable: true
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
+  unms:
+    image: nico640/docker-unms:1.2.7
+    restart: always
+    ports:
+      - 7443:443
+      - 2055:2055/udp
+    environment:
+      - TZ=Australia/Sydney
+    volumes:
+      - unms:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.unifi.loadbalancer.server.port: 80
+
+  homebridge:
+    image: oznu/homebridge:3.3.0
+    restart: always
+    network_mode: host
+    environment:
+      - PGID=8888
+      - PUID=8888
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8888
+    volumes:
+      - homebridge:/homebridge
+
 volumes:
   oci:
   vault:
@@ -101,4 +127,6 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  unms:
+  homebridge:
 

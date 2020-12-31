@@ -1,6 +1,6 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-openjdk:8-stretch
 
-ARG UNIFI_VERSION=6.0.28
+ARG UNIFI_VERSION=6.0.43
 
 RUN	curl -sLo /tmp/unifi.zip https://dl.ui.com/unifi/${UNIFI_VERSION}/UniFi.unix.zip && \
 	unzip -q /tmp/unifi.zip -d /usr/lib/ && \ 
