@@ -1,6 +1,9 @@
 api:
   dashboard: true
 
+serversTransport:
+  insecureSkipVerify: true
+
 entryPoints:
   http:
     address: ":80"

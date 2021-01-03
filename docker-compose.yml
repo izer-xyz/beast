@@ -88,12 +88,14 @@ services:
       - 2055:2055/udp
     environment:
       - TZ=Australia/Sydney
-      - UNMS_LOG_LEVEL=warn
+      - QUIET_MODE=1
     volumes:
       - unms:/config
     labels:
       traefik.enable: true
-      traefik.http.services.unifi.loadbalancer.server.port: 443
+      traefik.http.services.unms.loadbalancer.server.port: 443
+      traefik.http.services.unms.loadbalancer.server.scheme: https
+
 
   homebridge:
     image: oznu/homebridge:3.3.0
