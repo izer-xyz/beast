@@ -102,6 +102,8 @@ services:
     restart: always
     network_mode: host
     environment:
+      - TZ=Australia/Sydney
+      - PACKAGES=python3-dev,py3-pip
       - PGID=8888
       - PUID=8888
       - HOMEBRIDGE_CONFIG_UI=1
