@@ -12,6 +12,7 @@ services:
       - logz:/logZ
       - proxz:/proxZ
       - secretz:/secretZ
+      - backupz:/backupZ
 
 #  devz:
 #    build: .
@@ -21,7 +22,7 @@ services:
 #      - "traefik.enable=true"
 
   proxz:
-    image: traefik:2.3.6
+    image: traefik:2.3
     depends_on:
       - secretz
     restart: always
@@ -39,7 +40,7 @@ services:
       traefik.http.routers.api.service: 'api@internal'
 
   logz:
-    image: fluent/fluent-bit:1.6.7
+    image: fluent/fluent-bit:1.6
     depends_on:
       - secretz
     restart: always 
@@ -50,7 +51,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault:1.6.1
+    image: vault:1.6
     depends_on:
       - configz
     restart: always
@@ -73,6 +74,10 @@ services:
 #    user: 8000:0
     ports:
       - 8080:8080
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 6789:6789
+      - 5514:5514/udp
     volumes:
       - unifi:/usr/lib/unifi/data
       - unifi-log:/usr/lib/unifi/logs
@@ -81,7 +86,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
   unms:
-    image: nico640/docker-unms:1.2.7
+    image: nico640/docker-unms:1.2
     restart: always
     ports:
       - 7443:443
@@ -98,7 +103,7 @@ services:
 
 
   homebridge:
-    image: oznu/homebridge:3.3.0
+    image: oznu/homebridge:3.3
     restart: always
     network_mode: host
     environment:
@@ -110,6 +115,30 @@ services:
       - HOMEBRIDGE_CONFIG_UI_PORT=8888
     volumes:
       - homebridge:/homebridge
+
+  backupz:
+    image: azinchen/duplicacy:latest
+    depends_on:
+      - configz
+    environment:
+      - RUN_JOB_IMMEDIATELY=false
+      - BACKUP_CRON=0 1 * * *
+    volumes:
+      - backupz:/config
+      - logz:/data/logz
+    restart: unless-stopped
+
+  restore:
+    image: saspus/duplicacy-web:latest
+    environment:
+      - TZ=Australia/Sydney
+      - GRP_ID=3875
+      - USR_ID=3875
+    volumes:
+      - restore:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.backupz.loadbalancer.server.port: 3875
 
 volumes:
   oci:
@@ -134,4 +163,8 @@ volumes:
       device: tmpfs
   unms:
   homebridge:
-
+  restore:
+  backupz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs

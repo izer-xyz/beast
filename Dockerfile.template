@@ -11,5 +11,6 @@ COPY	configZ /configZ/
 COPY	logZ /configZ/logZ/
 COPY	proxZ /configZ/proxZ/	
 COPY	secretZ /configZ/secretZ/
+COPY	backupZ /configZ/backupZ/
 
 ENTRYPOINT [ "/configZ/entry.sh" ]
