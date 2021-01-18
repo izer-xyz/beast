@@ -51,7 +51,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault:1.6
+    image: vault:1.6.1
     depends_on:
       - configz
     restart: always
@@ -86,7 +86,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
   unms:
-    image: nico640/docker-unms:1.2
+    image: nico640/docker-unms:1.2.7
     restart: always
     ports:
       - 7443:443
@@ -103,7 +103,7 @@ services:
 
 
   homebridge:
-    image: oznu/homebridge:3.3
+    image: oznu/homebridge:3.3.0
     restart: always
     network_mode: host
     environment:
@@ -120,13 +120,15 @@ services:
     image: azinchen/duplicacy:latest
     depends_on:
       - configz
+    restart: unless-stopped
     environment:
       - RUN_JOB_IMMEDIATELY=false
       - BACKUP_CRON=0 1 * * *
     volumes:
       - backupz:/config
-      - logz:/data/logz
-    restart: unless-stopped
+      - vault:/data/vault
+      - unifi:/data/unifi
+      - unms:/data/unms
 
   restore:
     image: saspus/duplicacy-web:latest
