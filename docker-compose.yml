@@ -150,7 +150,7 @@ services:
       - PGID=3333
       - TZ=Australia/Sydney
 #      - PASSWORD=yourpass
-#      - SUDO_PASSWORD=yourpass
+      - SUDO_PASSWORD_HASH=$5$6ufiwWdL8bYJNcIZ$XsBQZadk0gklKJQKm1.D3fg3PgUZXYam9EE3Q4/Jap8
     volumes:
       - codex:/config
     labels:
