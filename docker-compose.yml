@@ -122,6 +122,7 @@ services:
       - configz
     restart: unless-stopped
     environment:
+      - TZ=Australia/Sydney
       - RUN_JOB_IMMEDIATELY=false
       - BACKUP_CRON=0 1 * * *
     volumes:
