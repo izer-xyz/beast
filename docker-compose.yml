@@ -144,7 +144,7 @@ services:
       traefik.http.services.restore.loadbalancer.server.port: 3875
   
   codex:
-    image: codercom/code-server:latest
+    image: ghcr.io/linuxserver/code-server
     environment:
       - PUID=3333
       - PGID=3333
@@ -153,10 +153,9 @@ services:
 #      - SUDO_PASSWORD=yourpass
     volumes:
       - codex:/config
-      - projects:/home/coder/project
     labels:
       traefik.enable: true
-      traefik.http.services.codex.loadbalancer.server.port: 8080
+      traefik.http.services.codex.loadbalancer.server.port: 8443
 
 volumes:
   oci:
@@ -187,5 +186,4 @@ volumes:
       type: tmpfs
       device: tmpfs
   codex:
-  projects:
 
