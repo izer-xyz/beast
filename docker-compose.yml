@@ -22,7 +22,7 @@ services:
 #      - "traefik.enable=true"
 
   proxz:
-    image: traefik:2.3
+    image: traefik:2.4
     depends_on:
       - secretz
     restart: always
@@ -40,7 +40,7 @@ services:
       traefik.http.routers.api.service: 'api@internal'
 
   logz:
-    image: fluent/fluent-bit:1.6
+    image: fluent/fluent-bit:1.7
     depends_on:
       - secretz
     restart: always 
@@ -51,7 +51,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault:1.6.2
+    image: vault:1.6.3
     depends_on:
       - configz
     restart: always
