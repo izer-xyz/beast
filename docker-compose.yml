@@ -51,7 +51,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault:1.6.3
+    image: vault:1.6.2
     depends_on:
       - configz
     restart: always
