@@ -1,6 +1,9 @@
++unms/unms-backups
++unms/unms-backups/*
++unms/config-backups
++unms/config-backups/*
++unifi/backup
++unifi/backup/*
 -unifi/*
 -unms/*
-+unifi/backup/*
-+unms/unms-backups/*
-+unms/config-backups/*
 #+vault/*
