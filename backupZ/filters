@@ -1,8 +1,8 @@
-+unms/unms-backups
++unms/unms-backups/
 +unms/unms-backups/*
-+unms/config-backups
++unms/config-backups/
 +unms/config-backups/*
-+unifi/backup
++unifi/backup/
 +unifi/backup/*
 -unifi/*
 -unms/*
