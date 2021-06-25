@@ -19,6 +19,8 @@ services:
     image: klutchell/balena-cli:12.38.5
     restart: always
     entrypoint: ["/code/entry.sh"]
+    ports:
+      - 8200:8200 
 #    user: 10000:10000
 #    labels:
     volumes:
@@ -54,7 +56,7 @@ services:
       io.balena.features.supervisor-api: '1'
 
   secretz:
-    image: vault:1.7.0
+    image: vault:1.7.3
     depends_on:
       - configz
     restart: always
