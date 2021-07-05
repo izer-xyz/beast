@@ -17,10 +17,15 @@ services:
 
   devz:
     image: klutchell/balena-cli:12.38.5
+    depends_on:
+      - configz
     restart: always
-    entrypoint: ["/code/entry.sh"]
+    entrypoint: ["/code/entry.sh", "--foreground", "--log-stdout", "--no-process-group"]
+    command: []
     ports:
       - 8200:8200 
+      - 139:139
+      - 445:445
 #    user: 10000:10000
 #    labels:
     volumes:
