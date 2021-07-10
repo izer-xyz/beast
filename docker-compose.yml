@@ -19,7 +19,7 @@ services:
     image: klutchell/balena-cli:12.38.5
     depends_on:
       - configz
-    restart: always
+    restart: unless-stopped
     entrypoint: ["/code/entry.sh", "--foreground", "--log-stdout", "--no-process-group"]
     command: []
     ports:
@@ -80,7 +80,7 @@ services:
 
   unifi:
     build: ./unifi
-    restart: no
+    restart: unless-stopped
 #    user: 8000:0
     ports:
       - 8080:8080
@@ -130,6 +130,7 @@ services:
 
   restore:
     image: saspus/duplicacy-web:latest
+    restart: unless-stopped
     environment:
       - TZ=Australia/Sydney
       - GRP_ID=3875
@@ -143,12 +144,11 @@ services:
   hass:
     image: homeassistant/raspberrypi4-homeassistant
     restart: always
+    privileged: true
     depends_on:
       - configz
     devices:
-      - /dev/mem:/dev/mem
-    cap_add:
-      - SYS_RAWIO
+      - /dev/*:/dev/*
     volumes:
       - hass:/config
     labels:
@@ -157,7 +157,7 @@ services:
 
   hass-config:
     image: causticlab/hass-configurator-docker:arm
-    restart: always
+    restart: unless-stopped
     depends_on:
       - configz
     environment:
