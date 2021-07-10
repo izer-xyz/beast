@@ -111,21 +111,6 @@ services:
       traefik.http.services.unms.loadbalancer.server.port: 443
       traefik.http.services.unms.loadbalancer.server.scheme: https
 
-
-#  homebridge:
-#    image: oznu/homebridge:3.3.0
-#    restart: always
-#    network_mode: host
-#    environment:
-#      - TZ=Australia/Sydney
-#      - PACKAGES=python3-dev,py3-pip
-#      - PGID=8888
-#      - PUID=8888
-#      - HOMEBRIDGE_CONFIG_UI=1
-#      - HOMEBRIDGE_CONFIG_UI_PORT=8888
-#    volumes:
-#      - homebridge:/homebridge
-
   backupz:
     image: azinchen/duplicacy:latest
     depends_on:
@@ -153,19 +138,33 @@ services:
       traefik.enable: true
       traefik.http.services.restore.loadbalancer.server.port: 3875
   
-#  codex:
-#    image: ghcr.io/linuxserver/code-server
-#    environment:
-#      - PUID=3333
-#      - PGID=3333
-#      - TZ=Australia/Sydney
-#      - PASSWORD=yourpass
-#      - SUDO_PASSWORD_HASH=$5$6ufiwWdL8bYJNcIZ$XsBQZadk0gklKJQKm1.D3fg3PgUZXYam9EE3Q4/Jap8
-#    volumes:
-#      - codex:/config
-#    labels:
-#      traefik.enable: true
-#      traefik.http.services.codex.loadbalancer.server.port: 8443
+  hass:
+    image: homeassistant/raspberrypi4-homeassistant
+    restart: always
+    depends_on:
+      - configz
+    devices:
+      - /dev/mem:/dev/mem
+    cap_add:
+      - SYS_RAWIO
+    volumes:
+      - hass:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.hass.loadbalancer.server.port: 8123
+
+  hass-config:
+    image: causticlab/hass-configurator-docker:arm
+    restart: always
+    depends_on:
+      - configz
+    environment:
+      - HC_BASEPATH=/hass-config
+    volumes:
+      - hass:/hass-config
+    labels:
+      traefik.enable: true
+      traefik.http.services.hass-config.loadbalancer.server.port: 3218
 
 volumes:
   oci:
@@ -197,4 +196,4 @@ volumes:
       device: tmpfs
   codex:
   code:
-
+  hass: 
