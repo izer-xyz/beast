@@ -125,6 +125,8 @@ services:
       - vault:/data/vault
       - unifi:/data/unifi
       - unms:/data/unms
+      - code:/data/code
+      - hass:/data/hass
 
   restore:
     image: saspus/duplicacy-web:latest
