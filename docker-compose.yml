@@ -50,7 +50,7 @@ services:
       traefik.http.routers.api.service: 'api@internal'
 
   logz:
-    image: fluent/fluent-bit:1.7
+    image: fluent/fluent-bit:1.8
     depends_on:
       - secretz
     restart: always 
@@ -59,9 +59,10 @@ services:
       - logz:/logz:ro
     labels:
       io.balena.features.supervisor-api: '1'
+      io.balena.features.journal-logs: '1'
 
   secretz:
-    image: vault:1.7.3
+    image: vault:1.8.0
     depends_on:
       - configz
     restart: always
@@ -96,7 +97,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
   unms:
-    image: nico640/docker-unms:1.3.10
+    image: nico640/docker-unms:1.3.11
     restart: always
     ports:
       - 7443:443
