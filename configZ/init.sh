@@ -2,23 +2,6 @@
 
 cd /configZ
 
-if [ ! -f /root/.oci/config ]; then 
-  echo KMS auth...
-  oci setup config
-  
-  echo KMS config...
-  cat ocikms.hcl.tpl > /root/.oci/ocikms.hcl 
-  vi /root/.oci/ocikms.hcl 
-
-  chmod -R +r /root/.oci 
-
-  echo add this public key to the OCI key user:  
-  cat /root/.oci/oci_api_key_public.pem
-
-  echo wait little...
-  sleep 10
-fi
-
 export VAULT_FORMAT=json
 
 if [ ! $VAULT_TOKEN ]; then
@@ -51,10 +34,6 @@ vault write auth/approle/role/$ROLE bound_cidr_list=$CIDR bind_secret_id=false p
 vault write auth/approle/role/$ROLE/role-id role_id=$ROLEID
 
 echo find and create secrets
-
-vault kv put env/$ROLE/logz \
-	ELASTIC_HOST="$ELASTIC_HOST" \
-	ELASTIC_INDEX="$ELASTIC_INDEX"
 
 vault kv put env/$ROLE/proxz \
 	DOMAIN="$DOMAIN" \
