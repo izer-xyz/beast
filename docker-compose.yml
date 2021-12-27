@@ -8,8 +8,6 @@ services:
     depends_on:
       - secretz
     restart: "unless-stopped"
-    env_file:
-      - .env
     environment:
       - D_EXTRA_ARGS=--outbound-http-proxy-listen=0.0.0.0:1055
       - STATE=/tailz/tailscale.state
@@ -20,29 +18,36 @@ services:
     build: .
     restart: "no"
     environment:
-      - BALENA_APP_NAME=test
-      - BALENA_DEVICE_UUID=test
       - VAULT_API_ADDR=https://secretz.claude.2w.design
       - VAULT_ADDR=https://secretz.claude.2w.design
       - HTTPS_PROXY=http://tailz:1055
-      #- https_proxy=http://tailz:1055
-      - VAULT_LOG_LEVEL=trace
     cap_add:
       - IPC_LOCK
     volumes:
       - vault:/vault/file
       - secretz:/vault/config
       - tailz:/tailZ
-      - proxz:/proxZ
       - secretz:/secretZ
-      - code:/codeZ
     labels:
       traefik.enable: true
+
+  configz:
+    build: .
+    entrypoint: ["/configZ/entry.sh"]
+    depends_on:
+      - secretz
+    restart: "no"
+    environment:
+      - VAULT_API_ADDR=http://secretz:8200
+      - VAULT_ADDR=http://secretz:8200
+    volumes:
+      - proxz:/proxZ
+      - code:/codeZ
 
   proxz:
     image: traefik:2.5
     depends_on:
-      - secretz
+      - configz
     restart: "no"
     ports:
       - 80:80 

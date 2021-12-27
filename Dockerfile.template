@@ -6,4 +6,4 @@ COPY	secretZ /configZ/secretZ/
 COPY	codeZ /configZ/codeZ/
 COPY	tailZ /configZ/tailZ/
 
-ENTRYPOINT [ "/configZ/entry.sh" ]
+ENTRYPOINT [ "/secretZ/entry.sh" ]
