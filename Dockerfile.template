@@ -8,4 +8,4 @@ COPY	tailZ /configZ/tailZ/
 
 RUN	apk add curl bash jq
 
-ENTRYPOINT [ "/secretZ/entry.sh" ]
+ENTRYPOINT [ "/configZ/secretZ/entry.sh" ]
