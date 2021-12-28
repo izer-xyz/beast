@@ -75,7 +75,7 @@ services:
 
   hass:
     image: homeassistant/raspberrypi4-homeassistant
-    restart: "no" 
+    restart: unless-stopped
     privileged: true
     devices:
       - /dev/*:/dev/*
@@ -96,6 +96,24 @@ services:
       traefik.enable: 'true'
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
+
+  unifi:
+    build: ./unifi
+    restart: unless-stopped
+#    user: 8000:0
+    ports:
+      - 8080:8080
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 6789:6789
+      - 5514:5514/udp
+    volumes:
+      - unifi:/usr/lib/unifi/data
+      - unifi-log:/usr/lib/unifi/logs
+    labels:
+      traefik.enable: true
+      traefik.http.services.unifi.loadbalancer.server.port: 8000
+
 volumes:
   tailz:
   vault:
@@ -111,3 +129,8 @@ volumes:
   code:
   hass: 
   esp:
+  unifi:
+  unifi-log:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
