@@ -65,8 +65,6 @@ services:
   hass-config:
     image: causticlab/hass-configurator-docker:arm
     restart: "no"
-    depends_on:
-      - secretz
     environment:
       - HC_BASEPATH=/hass-config
     volumes:
@@ -74,6 +72,29 @@ services:
     labels:
       traefik.enable: true
       traefik.http.services.hass-config.loadbalancer.server.port: 3218
+
+  hass:
+    image: homeassistant/raspberrypi4-homeassistant
+    restart: "no" 
+    privileged: true
+    devices:
+      - /dev/*:/dev/*
+    volumes:
+      - hass:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.hass.loadbalancer.server.port: 8123
+
+  esp:
+    image: esphome/esphome
+    restart: unless-stopped
+    environment:
+      - "ESPHOME_DASHBOARD_USE_PING=true"
+    volumes:
+      - esp:/config
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.esp.loadbalancer.server.port: '6052'
 
 volumes:
   tailz:
@@ -89,3 +110,4 @@ volumes:
       device: tmpfs
   code:
   hass: 
+  esp:
