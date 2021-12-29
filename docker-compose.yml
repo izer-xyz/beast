@@ -128,6 +128,22 @@ services:
       traefik.enable: true
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
+  unms:
+    image: nico640/docker-unms:testing
+    restart: always
+    ports:
+      - 7443:443
+      - 2055:2055/udp
+    environment:
+      - TZ=Australia/Sydney
+      - QUIET_MODE=1
+    volumes:
+      - unms:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.unms.loadbalancer.server.port: 443
+      traefik.http.services.unms.loadbalancer.server.scheme: https
+
 volumes:
   tailz:
   vault:
@@ -149,3 +165,4 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  unms:
