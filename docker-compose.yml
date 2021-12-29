@@ -115,12 +115,11 @@ services:
     restart: unless-stopped
 #    user: 8000:0
     ports:
-      - 8000:8000
-#      - 8080:8080
-#      - 3478:3478/udp
-#      - 10001:10001/udp
-#      - 6789:6789
-#      - 5514:5514/udp
+      - 8080:8080
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 6789:6789
+      - 5514:5514/udp
     volumes:
       - unifi:/usr/lib/unifi/data
       - unifi-log:/usr/lib/unifi/logs
@@ -130,7 +129,7 @@ services:
 
   uisp:
     image: nico640/docker-unms:testing
-    restart: always
+    restart: unless-stopped
     ports:
       - 7443:443
       - 2055:2055/udp
