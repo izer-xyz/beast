@@ -1,0 +1,11 @@
++uisp/
++uisp/unms/
++uisp/unms/unms-backups/*
++uisp/unms/config-backups/*
+-uisp/*
++unifi/
++unifi/backup/*
+-unifi/*
++code/
++code/src/*
+-code/*
