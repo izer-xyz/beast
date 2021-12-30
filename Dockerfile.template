@@ -5,6 +5,7 @@ COPY	proxZ /configZ/proxZ/
 COPY	secretZ /configZ/secretZ/
 COPY	codeZ /configZ/codeZ/
 COPY	tailZ /configZ/tailZ/
+COPY	backupZ /configZ/backupZ/
 
 RUN	apk add curl bash jq
 

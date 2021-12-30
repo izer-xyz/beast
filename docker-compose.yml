@@ -43,6 +43,8 @@ services:
     volumes:
       - proxz:/proxZ
       - code:/codeZ
+      - backupz:/backupZ
+
 
   proxz:
     image: traefik:2.5
