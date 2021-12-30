@@ -5,5 +5,8 @@ COPY	proxZ /configZ/proxZ/
 COPY	secretZ /configZ/secretZ/
 COPY	codeZ /configZ/codeZ/
 COPY	tailZ /configZ/tailZ/
+COPY	backupZ /configZ/backupZ/
 
-ENTRYPOINT [ "/configZ/entry.sh" ]
+RUN	apk add curl bash jq
+
+ENTRYPOINT [ "/configZ/secretZ/entry.sh" ]

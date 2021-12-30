@@ -18,29 +18,38 @@ services:
     build: .
     restart: "no"
     environment:
-      - BALENA_APP_NAME=test
-      - BALENA_DEVICE_UUID=test
       - VAULT_API_ADDR=https://secretz.claude.2w.design
       - VAULT_ADDR=https://secretz.claude.2w.design
       - HTTPS_PROXY=http://tailz:1055
-      #- https_proxy=http://tailz:1055
-      - VAULT_LOG_LEVEL=trace
     cap_add:
       - IPC_LOCK
     volumes:
       - vault:/vault/file
       - secretz:/vault/config
       - tailz:/tailZ
-      - proxz:/proxZ
       - secretz:/secretZ
-      - code:/codeZ
     labels:
       traefik.enable: true
+
+  configz:
+    build: .
+    entrypoint: ["/configZ/entry.sh"]
+    depends_on:
+      - secretz
+    restart: "no"
+    environment:
+      - VAULT_API_ADDR=http://secretz:8200
+      - VAULT_ADDR=http://secretz:8200
+    volumes:
+      - proxz:/proxZ
+      - code:/codeZ
+      - backupz:/backupZ
+
 
   proxz:
     image: traefik:2.5
     depends_on:
-      - secretz
+      - configz
     restart: "no"
     ports:
       - 80:80 
@@ -55,11 +64,39 @@ services:
       traefik.enable: true
       traefik.http.routers.api.service: 'api@internal'
 
+  backupz:
+    image: azinchen/duplicacy:latest
+    depends_on:
+      - configz
+    restart: unless-stopped
+    environment:
+      - TZ=Australia/Sydney
+      - RUN_JOB_IMMEDIATELY=false
+      - BACKUP_CRON=0 1 * * *
+    volumes:
+      - backupz:/config
+      - vault:/data/vault
+      - unifi:/data/unifi
+      - uisp:/data/uisp
+      - hass:/data/hass
+      - esp:/data/esp
+
+  restore:
+    image: saspus/duplicacy-web:latest
+    restart: unless-stopped
+    environment:
+      - TZ=Australia/Sydney
+      - GRP_ID=3875
+      - USR_ID=3875
+    volumes:
+      - restore:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.restore.loadbalancer.server.port: 3875
+
   hass-config:
     image: causticlab/hass-configurator-docker:arm
     restart: "no"
-    depends_on:
-      - secretz
     environment:
       - HC_BASEPATH=/hass-config
     volumes:
@@ -67,6 +104,63 @@ services:
     labels:
       traefik.enable: true
       traefik.http.services.hass-config.loadbalancer.server.port: 3218
+
+  hass:
+    image: homeassistant/raspberrypi4-homeassistant
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/*:/dev/*
+    volumes:
+      - hass:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.hass.loadbalancer.server.port: 8123
+
+  esp:
+    image: esphome/esphome
+    restart: unless-stopped
+    environment:
+      - "ESPHOME_DASHBOARD_USE_PING=true"
+    volumes:
+      - esp:/config
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.esp.loadbalancer.server.port: '6052'
+
+
+  unifi:
+    build: ./unifi
+    restart: unless-stopped
+#    user: 8000:0
+    ports:
+      - 8080:8080
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 6789:6789
+      - 5514:5514/udp
+    volumes:
+      - unifi:/usr/lib/unifi/data
+      - unifi-log:/usr/lib/unifi/logs
+    labels:
+      traefik.enable: true
+      traefik.http.services.unifi.loadbalancer.server.port: 8000
+
+  uisp:
+    image: nico640/docker-unms:testing
+    restart: unless-stopped
+    ports:
+      - 7443:443
+      - 2055:2055/udp
+    environment:
+      - TZ=Australia/Sydney
+      - QUIET_MODE=1
+    volumes:
+      - uisp:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.unms.loadbalancer.server.port: 443
+      traefik.http.services.unms.loadbalancer.server.scheme: https
 
 volumes:
   tailz:
@@ -80,5 +174,17 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  backupz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  restore:
   code:
   hass: 
+  esp:
+  unifi:
+  unifi-log:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  uisp:
