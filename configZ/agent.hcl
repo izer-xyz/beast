@@ -18,3 +18,8 @@ template {
 	destination	= "/proxZ/CF_DNS_API_TOKEN"
 }
 
+
+template {
+	source		= "/configZ/backupZ/preferences.tpl"
+	destination	= "/backupZ/preferences"
+}
