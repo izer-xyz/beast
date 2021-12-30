@@ -172,6 +172,10 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  backupz:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   restore:
   code:
   hass: 
