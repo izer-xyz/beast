@@ -9,9 +9,10 @@ balena push beast
  * proxz - Traefik reverse proxy + SSL termination
  * unifi - Ubiquiti Unifi Network Application (Wifi)
  * uisp - Ubiquity Network (router)
- * esphome - IoT
- * home assist - Home Automation
- * 
+ * esp - ESPHome IoT
+ * hass - Home Assitant - Automation
+ * backupz/restore - Duplicacy backup
+ * tailz - tailscale proxy
 
 TBD
 
