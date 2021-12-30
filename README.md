@@ -6,12 +6,16 @@ balena push beast
 
  * configz - manage config files
  * secretz - Hashi Vault secret storage
- * logz - fluent-bit + external ElasticSearch
  * proxz - Traefik reverse proxy + SSL termination
+ * unifi - Ubiquiti Unifi Network Application (Wifi)
+ * uisp - Ubiquity Network (router)
+ * esphome - IoT
+ * home assist - Home Automation
+ * 
 
 TBD
 
- * unifi
+ * logz - fluent-bit + external ElasticSearch
  * homebridge-dyson-link
  * https://github.com/brontide/inform_protocol
  * balenaSound
@@ -22,7 +26,6 @@ TBD
 ## External Dependencies
 
  * BalenaCloud: fleet management + RPi containers
- * ElasticSearch: log storage (could be moved to local)
- * Oracle OCI: KMS to auto unseal Hashi Vault
+ * Remote hashi vault: transit key to auto unseal Hashi Vault
  * Cloudflare: public DNS 
 
