@@ -119,6 +119,7 @@ services:
 
   esp:
     image: esphome/esphome
+    command: ["-q", "dashboard", "/config"]
     restart: unless-stopped
     environment:
       - "ESPHOME_DASHBOARD_USE_PING=true"
