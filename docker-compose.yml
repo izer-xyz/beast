@@ -183,7 +183,7 @@ services:
       traefik.enable: true
 
   netflow:
-    image: quay.io/jotak/goflow2:loki-latest
+    image: ghcr.io/izer-xyz/goflow2-loki-exporter:latest 
     command: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
     ports:
       - 2055:2056/udp
