@@ -152,7 +152,7 @@ services:
     restart: unless-stopped
     ports:
       - 7443:443
-      - 2055:2055/udp
+#      - 2055:2055/udp
     environment:
       - TZ=Australia/Sydney
       - QUIET_MODE=1
@@ -186,7 +186,7 @@ services:
     image: ghcr.io/izer-xyz/goflow2-loki-exporter:latest 
     entrypoint: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
     ports:
-      - 2055:2056/udp
+      - 2055:2055/udp
 
 volumes:
   tailz:
