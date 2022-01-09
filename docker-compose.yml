@@ -163,6 +163,31 @@ services:
       traefik.http.services.unms.loadbalancer.server.port: 443
       traefik.http.services.unms.loadbalancer.server.scheme: https
 
+  loki:
+    image: grafana/loki:2.4.1
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    restart: unless-stopped
+    ports:
+      - 3100:3100
+    environment:
+      - TZ=Australia/Sydney
+    volumes:
+      - loki:/loki
+
+  dash:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    environment:
+      - TZ=Australia/Sydney
+    labels:
+      traefik.enable: true
+
+  netflow:
+    image: quay.io/jotak/goflow2:loki-latest
+    command: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
+    ports:
+      - 2055:2056/udp
+
 volumes:
   tailz:
   vault:
@@ -189,3 +214,4 @@ volumes:
       type: tmpfs
       device: tmpfs
   uisp:
+  loki:
