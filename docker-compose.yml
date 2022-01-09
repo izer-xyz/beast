@@ -184,7 +184,7 @@ services:
 
   netflow:
     image: ghcr.io/izer-xyz/goflow2-loki-exporter:latest 
-    command: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
+    entrypoint: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
     ports:
       - 2055:2056/udp
 
