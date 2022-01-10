@@ -80,6 +80,7 @@ services:
       - uisp3:/data/uisp
       - hass:/data/hass
       - esp:/data/esp
+      - grafana:/data/grafana
 
   restore:
     image: saspus/duplicacy-web:latest
@@ -175,10 +176,12 @@ services:
       - loki:/loki
 
   dash:
-    image: grafana/grafana:latest
+    image: grafana/grafana-oss:latest
     restart: unless-stopped
     environment:
       - TZ=Australia/Sydney
+    volumes:
+      - grafana:/var/lib/grafana
     labels:
       traefik.enable: true
 
@@ -207,6 +210,6 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
-  uisp:
   uisp3:
   loki:
+  grafana:
