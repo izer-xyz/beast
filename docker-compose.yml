@@ -77,7 +77,7 @@ services:
       - backupz:/config
       - vault:/data/vault
       - unifi:/data/unifi
-      - uisp:/data/uisp
+      - uisp3:/data/uisp
       - hass:/data/hass
       - esp:/data/esp
 
@@ -148,7 +148,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
   uisp:
-    image: nico640/docker-unms:testing
+    image: nico640/docker-unms:1.3.11
     restart: unless-stopped
     ports:
       - 7443:443
@@ -157,7 +157,7 @@ services:
       - TZ=Australia/Sydney
       - QUIET_MODE=1
     volumes:
-      - uisp:/config
+      - uisp3:/config
     labels:
       traefik.enable: true
       traefik.http.services.unms.loadbalancer.server.port: 443
@@ -181,12 +181,6 @@ services:
       - TZ=Australia/Sydney
     labels:
       traefik.enable: true
-
-  netflow:
-    image: ghcr.io/izer-xyz/goflow2-loki-exporter:latest 
-    entrypoint: ["/bin/sh", "-c", "/goflow2 | /loki-exporter"]
-    ports:
-      - 2056:2055/udp
 
 volumes:
   tailz:
@@ -214,4 +208,5 @@ volumes:
       type: tmpfs
       device: tmpfs
   uisp:
+  uisp3:
   loki:
