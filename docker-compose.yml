@@ -149,7 +149,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.port: 8000
 
   uisp:
-    image: nico640/docker-unms:1.4.2
+    image: nico640/docker-unms:testing
     restart: unless-stopped
     ports:
       - 7443:443
