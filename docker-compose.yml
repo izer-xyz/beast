@@ -189,6 +189,8 @@ services:
     image: wbitt/network-multitool:alpine-extra
     volumes:
       - code:/code
+    ports:
+      - 5201:5201
 
 volumes:
   tailz:
