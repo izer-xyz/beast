@@ -1,31 +1,30 @@
-version: '3'
+version: '3.8'
 
 services:
 
   proxz:
     image: traefik:2.9
-    restart: unless-stopped
     ports:
-      - 80:80 
-      - 443:443
+      - target: 443
+        published: 443 
+        mode: host
     environment:
       - TRAEFIK_API=true
       - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
-      - TRAEFIK_ENTRYPOINTS_http_ADDRESS=80
+      - TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
       - TRAEFIK_ENTRYPOINTS_http_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
-      - TRAEFIK_ENTRYPOINTS_https_ADDRESS=443
+      - TRAEFIK_ENTRYPOINTS_https_ADDRESS=:443
       - TRAEFIK_ENTRYPOINTS_https_HTTP_TLS_CERTRESOLVER=letsencrypt
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_STORAGE=/etc/certz/acme.json
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_PROVIDER=cloudflare
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_RESOLVERS=1.1.1.1:53
+      - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ `{{ index .Labels "com.docker.swarm.service.name" | splitList "_" | last }}` }}.$domain`)
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_EMAIL=$email
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
-      - OVERRIDE_THE_NEXT=_____________________________________
-      - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ index .Labels "com.docker.compose.service" }}.DOMAIN`)
-      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_EMAIL=EMAIL@ADDRES
     secrets: 
       - cloudflare_api_token
     volumes:
-      - proxz:/etc/traefik:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - certz:/etc/certz
     labels:
       traefik.enable: 'true'
@@ -33,10 +32,6 @@ services:
 
 volumes:
   certz:
-  proxz:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
 
 secrets:
   cloudflare_api_token:
