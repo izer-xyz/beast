@@ -43,7 +43,7 @@ services:
       traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
 
-restore:
+  restore:
     image: saspus/duplicacy-web:latest
     environment:
       - TZ=$TZ
@@ -54,7 +54,7 @@ restore:
     labels:
       traefik.enable: true
       traefik.http.services.restore.loadbalancer.server.port: 3875
-      
+
   esp:
     image: esphome/esphome:2022.12
     command: ["-q", "dashboard", "/config"]
