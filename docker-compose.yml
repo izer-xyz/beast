@@ -6,6 +6,7 @@ services:
     image: tailscale/tailscale:v1.34
     command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
     environment:
+      - TZ=$TZ
       - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
       - TS_STATE_DIR=/tailz/
     secrets: 
@@ -20,6 +21,7 @@ services:
         published: 443 
         mode: host
     environment:
+      - TZ=$TZ
       - TRAEFIK_API=true
       - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
       - TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
@@ -41,10 +43,23 @@ services:
       traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
 
+restore:
+    image: saspus/duplicacy-web:latest
+    environment:
+      - TZ=$TZ
+      - GRP_ID=3875
+      - USR_ID=3875
+    volumes:
+      - restore:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.restore.loadbalancer.server.port: 3875
+      
   esp:
     image: esphome/esphome:2022.12
     command: ["-q", "dashboard", "/config"]
     environment:
+      - TZ=$TZ
       - ESPHOME_DASHBOARD_USE_PING=true
     volumes:
       - esp:/config
@@ -53,8 +68,9 @@ services:
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
 volumes:
-  certz:
   tailz:
+  certz:
+  restore:
   esp:
 
 secrets:
