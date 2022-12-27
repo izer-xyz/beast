@@ -52,7 +52,7 @@ services:
     volumes:
       - restore:/config
     labels:
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.services.restore.loadbalancer.server.port: 3875
 
   esp:
