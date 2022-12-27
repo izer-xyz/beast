@@ -2,6 +2,17 @@ version: '3.8'
 
 services:
 
+  tailz:
+    image: tailscale/tailscale:v1.34
+    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+    environment:
+      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
+      - TS_STATE_DIR=/tailz/
+    secrets: 
+      - tailscale_auth_key
+    volumes:
+      - tailz:/tailz
+
   proxz:
     image: traefik:2.9
     ports:
@@ -32,7 +43,10 @@ services:
 
 volumes:
   certz:
+  tailz:
 
 secrets:
+  tailscale_auth_key:
+    external: true
   cloudflare_api_token:
     external: true
