@@ -69,7 +69,7 @@ services:
 
   uisp:
     image: nico640/docker-unms:1.4.8
-    command: /bin/sh
+    entrypoint: /bin/sh
     ports:
       - target: 2055
         published: 2055
