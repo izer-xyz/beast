@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
 
-  tailz:
-    image: tailscale/tailscale:v1.34
-    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
-    environment:
-      - TZ=$TZ
-      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
-      - TS_STATE_DIR=/tailz/
-    secrets: 
-      - tailscale_auth_key
-    volumes:
-      - tailz:/tailz
+#  tailz:
+#    image: tailscale/tailscale:v1.34
+#    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+#    environment:
+#      - TZ=$TZ
+#      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
+#      - TS_STATE_DIR=/tailz/
+#    secrets: 
+#      - tailscale_auth_key
+#    volumes:
+#      - tailz:/tailz
 
   proxz:
     image: traefik:2.9
@@ -67,22 +67,22 @@ services:
       traefik.enable: 'true'
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
-#  uisp:
-#    image: nico640/docker-unms:1.4.8
-#    ports:
-#      - target: 2055
-#        published: 2055
-#        protocol: 'udp'
-#        mode: 'host'
-#    environment:
-#      - TZ=$TZ
-#      - QUIET_MODE=1
-#    volumes:
-#      - uisp:/config
-#    labels:
-#      traefik.enable: 'true'
-#      traefik.http.services.unms.loadbalancer.server.port: 443
-#      traefik.http.services.unms.loadbalancer.server.scheme: 'https'
+  uisp:
+    image: nico640/docker-unms:1.4.8
+    ports:
+      - target: 2055
+        published: 2055
+        protocol: 'udp'
+        mode: 'host'
+    environment:
+      - TZ=$TZ
+      - QUIET_MODE=1
+    volumes:
+      - uisp:/config
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.unms.loadbalancer.server.port: 443
+      traefik.http.services.unms.loadbalancer.server.scheme: 'https'
 
 volumes:
   tailz:
