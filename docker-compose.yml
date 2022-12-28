@@ -85,14 +85,14 @@ services:
       traefik.http.services.unms.loadbalancer.server.scheme: 'https'
 
 volumes:
-  tailz:
+#  tailz:
   certz:
   restore:
   esp:
   uisp:
 
 secrets:
-  tailscale_auth_key:
-    external: true
+#  tailscale_auth_key:
+#    external: true
   cloudflare_api_token:
     external: true
