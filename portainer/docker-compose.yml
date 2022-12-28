@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  tailz:
+    image: tailscale/tailscale:v1.34
+    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+    environment:
+      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
+      - TS_STATE_DIR=/data/
+    secrets: 
+      - tailscale_auth_key
+    volumes:
+      - tailz_data:/data
+
+  portainer:
+    image: portainer/portainer-ee:2.16.2-alpine
+      - target: 9000
+        published: 9000
+        mode: host
+    environment:
+      - http_proxy=tailz:1055
+      - https_proxy=tailz:1055
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:var/run/docker.sock
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
+
+volumes:
+  tailz_data:
+  portainer_data:
+
+secrets:
+  tailscale_auth_key:
+    external: true
