@@ -69,7 +69,7 @@ services:
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
   uisp:
-    image: nico640/docker-unms:1.4.8
+    image: nico640/docker-unms:1.4.7
     ports:
       - target: 2055
         published: 2055
