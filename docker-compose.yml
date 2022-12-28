@@ -85,13 +85,25 @@ services:
       traefik.http.services.uisp.loadbalancer.server.port: 443
       traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
+  hass:
+    image: homeassistant/raspberrypi4-homeassistant:stable
+    privileged: true
+    devices:
+      - /dev/*:/dev/*
+    volumes:
+      - hass:/config
+    labels:
+      traefik.enable: true
+      traefik.http.services.hass.loadbalancer.server.port: 8123
+      
 volumes:
 #  tailz:
   certz:
   restore:
   esp:
   uisp:
-
+  hass: 
+  
 secrets:
 #  tailscale_auth_key:
 #    external: true
