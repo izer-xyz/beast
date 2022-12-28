@@ -93,7 +93,7 @@ services:
     volumes:
       - hass:/config
     labels:
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.services.hass.loadbalancer.server.port: 8123
       
 volumes:
