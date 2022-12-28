@@ -81,8 +81,8 @@ services:
       - uisp:/config
     labels:
       traefik.enable: 'true'
-      traefik.http.services.unms.loadbalancer.server.port: 443
-      traefik.http.services.unms.loadbalancer.server.scheme: 'https'
+      traefik.http.services.uisp.loadbalancer.server.port: 443
+      traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
 volumes:
 #  tailz:
