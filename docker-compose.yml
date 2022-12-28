@@ -86,7 +86,7 @@ services:
       traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
   hass:
-    image: homeassistant/raspberrypi4-homeassistant:stable
+    image: homeassistant/home-assistant:stable
     privileged: true
     devices:
       - /dev/*:/dev/*
