@@ -86,7 +86,7 @@ services:
       traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
   unifi:
-    image: jacobalberty/unifi:7.1.68
+    image: jacobalberty/unifi:v7.3
     ports:
       - target: 3478
         published: 3478
@@ -112,7 +112,7 @@ services:
       traefik.http.services.hass.loadbalancer.server.port: 8123
 
   hass-config:
-    image: causticlab/hass-configurator-docker:arm
+    image: causticlab/hass-configurator-docker:0.5.2
     environment:
       - HC_BASEPATH=/hass-config
     volumes:
