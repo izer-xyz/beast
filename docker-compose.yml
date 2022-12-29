@@ -96,7 +96,7 @@ services:
       - unifi:/unifi/data
       - unifi-log:/unifi/logs
     labels:
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.services.unifi.loadbalancer.server.port: 8443
       traefik.http.services.unifi.loadbalancer.server.scheme: 'https'
 
@@ -118,7 +118,7 @@ services:
     volumes:
       - hass:/hass-config
     labels:
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.services.hass-config.loadbalancer.server.port: 3218
       
 volumes:
