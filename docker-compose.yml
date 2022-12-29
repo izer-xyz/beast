@@ -104,7 +104,7 @@ services:
       traefik.http.services.unifi.loadbalancer.server.scheme: 'https'
 
   hass:
-    image: homeassistant/home-assistant:stable
+    image: homeassistant/home-assistant:2022.10.0.dev20220914
     privileged: true
     devices:
       - /dev/*:/dev/*
