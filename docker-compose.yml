@@ -37,7 +37,8 @@ services:
       - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ `{{ index .Labels "com.docker.swarm.service.name" | splitList "_" | last }}` }}.$domain`)
       - TRAEFIK_PROVIDERS_FILE_FILENAME=/traefik_file_config.yml
     configs:
-      - traefik_file_config.yml
+      - source: traefik_file_config
+        target: /traefik_file_config.yml
     secrets: 
       - cloudflare_api_token
     volumes:
@@ -131,7 +132,7 @@ volumes:
   hass: 
 
 configs: 
-  traefik_file_config.yml:
+  traefik_file_config:
     external: true
 
 secrets:
