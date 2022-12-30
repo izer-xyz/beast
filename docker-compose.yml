@@ -22,19 +22,22 @@ services:
         mode: host
     environment:
       - TZ=$TZ
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
       - TRAEFIK_API=true
       - TRAEFIK_SERVERSTRANSPORT_INSECURESKIPVERIFY=true
-      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
       - TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
       - TRAEFIK_ENTRYPOINTS_http_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
       - TRAEFIK_ENTRYPOINTS_https_ADDRESS=:443
       - TRAEFIK_ENTRYPOINTS_https_HTTP_TLS_CERTRESOLVER=letsencrypt
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_STORAGE=/etc/certz/acme.json
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_EMAIL=$email
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_PROVIDER=cloudflare
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_RESOLVERS=1.1.1.1:53
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
       - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ `{{ index .Labels "com.docker.swarm.service.name" | splitList "_" | last }}` }}.$domain`)
-      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_EMAIL=$email
-      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
+      - TRAEFIK_PROVIDERS_FILE_DIRECTORY=/traefik_file_config
+    configs:
+      - traefik_file_config
     secrets: 
       - cloudflare_api_token
     volumes:
@@ -126,7 +129,11 @@ volumes:
       type: tmpfs
       device: tmpfs
   hass: 
-  
+
+configs: 
+  traefik_file_config:
+    external: true
+
 secrets:
 #  tailscale_auth_key:
 #    external: true
