@@ -35,7 +35,7 @@ services:
       - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_RESOLVERS=1.1.1.1:53
       - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
       - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ `{{ index .Labels "com.docker.swarm.service.name" | splitList "_" | last }}` }}.$domain`)
-      - TRAEFIK_PROVIDERS_FILE_DIRECTORY=/traefik_file_config
+      - TRAEFIK_PROVIDERS_FILE_FILENAME=/traefik_file_config
     configs:
       - traefik_file_config
     secrets: 
