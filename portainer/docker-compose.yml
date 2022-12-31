@@ -6,6 +6,7 @@ services:
     image: tailscale/tailscale:v1.34
     command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
     environment:
+      - TS_EXTRA_ARGS=--hostname=portainer
       - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
       - TS_STATE_DIR=/data/
     secrets: 
@@ -13,14 +14,21 @@ services:
     volumes:
       - tailz_data:/data
 
+  caddy:
+    image: caddy:2
+    environment:
+      - all_proxy=tailz:1055
+      - http_proxy=tailz:1055
+      - https_proxy=tailz:1055
+    configs:
+      - source: caddy_config
+        target: /etc/caddy/Caddyfile
+        
   portainer:
     image: portainer/portainer-ee:2.16.2-alpine
       - target: 9000
         published: 9000
         mode: host
-    environment:
-      - http_proxy=tailz:1055
-      - https_proxy=tailz:1055
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:var/run/docker.sock
@@ -28,6 +36,10 @@ services:
 volumes:
   tailz_data:
   portainer_data:
+
+configs:
+  caddy_config:
+    external: true
 
 secrets:
   tailscale_auth_key:
