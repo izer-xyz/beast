@@ -41,6 +41,8 @@ volumes:
   portainer_data:
 
 configs:
+  # example: 900 -> TAILNET-SERVER:9000 via tailz:1055
+  # socat TCP4-LISTEN:900,reuseaddr,fork PROXY:tailz:TAILNET-SERVER:9000,proxyport=1055
   socat_sh:
     external: true
 
