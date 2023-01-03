@@ -1,32 +1,26 @@
 # Home server
 
-balena push beast
+docker stack up --compose-file docker-compose.yml beast
 
 ## Services
 
- * configz - manage config files
- * secretz - Hashi Vault secret storage
  * proxz - Traefik reverse proxy + SSL termination
  * unifi - Ubiquiti Unifi Network Application (Wifi)
  * uisp - Ubiquity Network (router)
  * esp - ESPHome IoT
  * hass - Home Assitant - Automation
  * backupz/restore - Duplicacy backup
- * tailz - tailscale proxy
+ * portainer/tailz - tailscale proxy
+ * portainer - manage containers
 
 TBD
 
  * logz - fluent-bit + external ElasticSearch
- * homebridge-dyson-link
  * https://github.com/brontide/inform_protocol
- * balenaSound
- * https://github.com/benbusby/whoogle-search
  * ... 
 
 
 ## External Dependencies
 
- * BalenaCloud: fleet management + RPi containers
- * Remote hashi vault: transit key to auto unseal Hashi Vault
  * Cloudflare: public DNS 
 

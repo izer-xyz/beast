@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  tailz:
+    image: tailscale/tailscale:v1.34
+    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+    deploy:
+      endpoint_mode: dnsrr
+    environment:
+      - TS_EXTRA_ARGS=--hostname=portainer
+      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
+      - TS_STATE_DIR=/data/
+    secrets: 
+      - tailscale_auth_key
+    volumes:
+      - tailz_data:/data
+
+  socat:
+    image: alpine/socat:1.7.4.4-r0
+    entrypoint: /entrypoint.sh
+    deploy:
+      endpoint_mode: dnsrr
+    configs:
+      - source: socat_sh 
+        target: /entrypoint.sh
+        mode: 0555 
+  
+  portainer:
+    image: portainer/portainer-ee:2.16.2-alpine
+    ports:
+      - target: 9000
+        published: 9000
+        mode: host
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  tailz_data:
+  portainer_data:
+
+configs:
+  # example: 900 -> TAILNET-SERVER:9000 via tailz:1055
+  # socat TCP4-LISTEN:900,reuseaddr,fork PROXY:tailz:TAILNET-SERVER:9000,proxyport=1055
+  socat_sh:
+    external: true
+
+secrets:
+  tailscale_auth_key:
+    external: true

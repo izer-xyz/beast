@@ -1,222 +1,145 @@
-version: '2'
+version: '3.8'
 
 services:
 
-  tailz:
-    image: tailscale/tailscale
-    command: ["/bin/sh", "-c", "/tailz/tailnet.sh"]
-    depends_on:
-      - secretz
-    restart: "unless-stopped"
-    environment:
-      - D_EXTRA_ARGS=--outbound-http-proxy-listen=0.0.0.0:1055
-      - STATE=/tailz/tailscale.state
-    volumes:
-      - tailz:/tailz
-
-  secretz:
-    build: .
-    restart: "no"
-    environment:
-      - VAULT_API_ADDR=https://secretz.claude.2w.design
-      - VAULT_ADDR=https://secretz.claude.2w.design
-      - HTTPS_PROXY=http://tailz:1055
-    cap_add:
-      - IPC_LOCK
-    volumes:
-      - vault:/vault/file
-      - secretz:/vault/config
-      - tailz:/tailZ
-      - secretz:/secretZ
-    labels:
-      traefik.enable: true
-
-  configz:
-    build: .
-    entrypoint: ["/configZ/entry.sh"]
-    depends_on:
-      - secretz
-    restart: "no"
-    environment:
-      - VAULT_API_ADDR=http://secretz:8200
-      - VAULT_ADDR=http://secretz:8200
-    volumes:
-      - proxz:/proxZ
-      - code:/codeZ
-      - backupz:/backupZ
-
+#  tailz:
+#    image: tailscale/tailscale:v1.34
+#    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+#    environment:
+#      - TZ=$TZ
+#      - TS_OUTBOUND_HTTP_PROXY_LISTEN=:1055
+#      - TS_STATE_DIR=/tailz/
+#    secrets: 
+#      - tailscale_auth_key
+#    volumes:
+#      - tailz:/tailz
 
   proxz:
-    image: traefik:2.8
-    depends_on:
-      - configz
-    restart: "no"
+    image: traefik:2.9
     ports:
-      - 80:80 
-      - 443:443
+      - target: 443
+        published: 443 
+        mode: host
+      - target: 80
+        published: 80 
+        mode: host
     environment:
-      - CF_DNS_API_TOKEN_FILE=/etc/traefik/CF_DNS_API_TOKEN
+      - TZ=$TZ
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
+      - TRAEFIK_API=true
+      - TRAEFIK_SERVERSTRANSPORT_INSECURESKIPVERIFY=true
+      - TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_http_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
+      - TRAEFIK_ENTRYPOINTS_https_ADDRESS=:443
+      - TRAEFIK_ENTRYPOINTS_https_HTTP_TLS_CERTRESOLVER=letsencrypt
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_STORAGE=/etc/certz/acme.json
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_EMAIL=$email
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_PROVIDER=cloudflare
+      - TRAEFIK_CERTIFICATESRESOLVERS_letsencrypt_ACME_DNSCHALLENGE_RESOLVERS=1.1.1.1:53
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE=Host(`{{ `{{ index .Labels "com.docker.swarm.service.name" | splitList "_" | last }}` }}.$domain`)
+      - TRAEFIK_PROVIDERS_FILE_FILENAME=/traefik_file_config.yml
+    configs:
+      - source: traefik_file_config
+        target: /traefik_file_config.yml
+    secrets: 
+      - cloudflare_api_token
     volumes:
-      - proxz:/etc/traefik:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - certz:/etc/certz
     labels:
-      io.balena.features.balena-socket: '1'
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
-
-  backupz:
-    image: azinchen/duplicacy:latest
-    depends_on:
-      - configz
-    restart: unless-stopped
-    environment:
-      - TZ=Australia/Sydney
-      - RUN_JOB_IMMEDIATELY=false
-      - BACKUP_CRON=0 1 * * *
-    volumes:
-      - backupz:/config
-      - vault:/data/vault
-      - unifi:/data/unifi
-      - uisp3:/data/uisp
-      - hass:/data/hass
-      - esp:/data/esp
-      - grafana:/data/grafana
 
   restore:
     image: saspus/duplicacy-web:latest
-    restart: unless-stopped
     environment:
-      - TZ=Australia/Sydney
+      - TZ=$TZ
       - GRP_ID=3875
       - USR_ID=3875
     volumes:
       - restore:/config
     labels:
-      traefik.enable: true
+      traefik.enable: 'true'
       traefik.http.services.restore.loadbalancer.server.port: 3875
 
-  hass-config:
-    image: causticlab/hass-configurator-docker:arm
-    restart: "no"
-    environment:
-      - HC_BASEPATH=/hass-config
-    volumes:
-      - hass:/hass-config
-    labels:
-      traefik.enable: true
-      traefik.http.services.hass-config.loadbalancer.server.port: 3218
-
-  hass:
-    image: homeassistant/raspberrypi4-homeassistant
-    restart: unless-stopped
-    privileged: true
-    devices:
-      - /dev/*:/dev/*
-    volumes:
-      - hass:/config
-    labels:
-      traefik.enable: true
-      traefik.http.services.hass.loadbalancer.server.port: 8123
-
   esp:
-    image: esphome/esphome
+    image: esphome/esphome:2022.12
     command: ["-q", "dashboard", "/config"]
-    restart: unless-stopped
     environment:
-      - "ESPHOME_DASHBOARD_USE_PING=true"
+      - TZ=$TZ
+      - ESPHOME_DASHBOARD_USE_PING=true
     volumes:
       - esp:/config
     labels:
       traefik.enable: 'true'
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
-
-  unifi:
-    build: ./unifi
-    restart: unless-stopped
-#    user: 8000:0
-    ports:
-      - 8080:8080
-      - 3478:3478/udp
-      - 10001:10001/udp
-      - 6789:6789
-      - 5514:5514/udp
-    volumes:
-      - unifi:/usr/lib/unifi/data
-      - unifi-log:/usr/lib/unifi/logs
-    labels:
-      traefik.enable: true
-      traefik.http.services.unifi.loadbalancer.server.port: 8000
-
   uisp:
-    image: nico640/docker-unms:1.4.7
-    restart: unless-stopped
+    image: nico640/docker-unms:1.5.7
     ports:
-      - 7443:443
-      - 2055:2055/udp
+      - target: 2055
+        published: 2055
+        protocol: 'udp'
+        mode: 'host'
     environment:
-      - TZ=Australia/Sydney
+      - TZ=$TZ
       - QUIET_MODE=1
     volumes:
-      - uisp3:/config
+      - uisp:/config
     labels:
-      traefik.enable: true
-      traefik.http.services.unms.loadbalancer.server.port: 443
-      traefik.http.services.unms.loadbalancer.server.scheme: https
+      traefik.enable: 'true'
+      traefik.http.services.uisp.loadbalancer.server.port: 443
+      traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
-#  loki:
-#    image: grafana/loki:2.4.1
-#    command: ["-config.file=/etc/loki/local-config.yaml"]
-#    restart: unless-stopped
-#    ports:
-#      - 3100:3100
-#    environment:
-#      - TZ=Australia/Sydney
-#    volumes:
-#      - loki:/loki
-
-  dash:
-    image: grafana/grafana-oss:latest
-    restart: unless-stopped
-    environment:
-      - TZ=Australia/Sydney
-    volumes:
-      - grafana:/var/lib/grafana
-    labels:
-      traefik.enable: true
-
-  code:
-    image: wbitt/network-multitool:alpine-extra
-    volumes:
-      - code:/code
+  unifi:
+    image: jacobalberty/unifi:v7.3
     ports:
-      - 5201:5201
+      - target: 3478
+        published: 3478
+        protocol: 'udp'
+        mode: 'host'
+      - target: 8080
+        published: 8080
+        mode: 'host'
+    volumes:
+      - unifi:/unifi/data
+      - unifi-log:/unifi/logs
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.unifi.loadbalancer.server.port: 8443
+      traefik.http.services.unifi.loadbalancer.server.scheme: 'https'
 
+  hass:
+    image: homeassistant/raspberrypi4-64-homeassistant:stable
+    privileged: true
+    devices:
+      - /dev/*:/dev/*
+    volumes:
+      - hass:/config
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.hass.loadbalancer.server.port: 8123
+      
 volumes:
-  tailz:
-  vault:
-  secretz:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
+#  tailz:
   certz:
-  proxz:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  backupz:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
   restore:
-  code:
-  hass: 
   esp:
+  uisp:
   unifi:
   unifi-log:
     driver_opts:
       type: tmpfs
       device: tmpfs
-  uisp3:
-  loki:
-  grafana:
+  hass: 
+
+configs: 
+  traefik_file_config:
+    external: true
+
+secrets:
+#  tailscale_auth_key:
+#    external: true
+  cloudflare_api_token:
+    external: true
