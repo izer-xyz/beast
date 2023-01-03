@@ -82,6 +82,7 @@ services:
 
   unifi:
     image: jacobalberty/unifi:v7.3
+    user: unifi
     ports:
       - target: 3478
         published: 3478
