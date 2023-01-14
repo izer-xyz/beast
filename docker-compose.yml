@@ -51,7 +51,7 @@ services:
       - STORAGE_URL=$BACKUP_STORAGE_URL
       - SNAPSHOT_ID=$BACKUP_ID
     secrets:
-      - duplicacy_prefrences
+      - duplicacy_preferences
     volumes:
       - backup:/config
       - unifi:/data/unifi
@@ -150,5 +150,5 @@ configs:
 secrets:
   cloudflare_api_token:
     external: true
-  duplicacy_prefrences:
+  duplicacy_preferences:
     external: true
