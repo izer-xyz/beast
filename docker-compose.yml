@@ -40,7 +40,22 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
-
+      
+  backupz:
+    image: azinchen/duplicacy:latest
+    environment:
+      - TZ=$TZ
+      - RUN_JOB_IMMEDIATELY=false
+      - BACKUP_CRON=0 1 * * *
+    configs:
+      - source: duplicacy_preferences
+        target: /config/preferences
+    volumes:
+      - unifi:/data/unifi
+      - uisp:/data/uisp
+      - hass:/data/hass
+      - esp:/data/esp
+      
   restore:
     image: saspus/duplicacy-web:latest
     environment:
@@ -126,6 +141,8 @@ volumes:
 
 configs: 
   traefik_file_config:
+    external: true
+  duplicacy_preferences:
     external: true
 
 secrets:
