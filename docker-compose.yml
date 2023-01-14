@@ -48,6 +48,8 @@ services:
       - RUN_JOB_IMMEDIATELY=false
       - BACKUP_CRON=0 1 * * *
       - FILTER_PATTERNS=+uisp/;+uisp/unms/;+uisp/unms/unms-backups/*;+uisp/unms/config-backups/*;-uisp/*;+unifi/;+unifi/backup/*;-unifi/*;-esp/.*
+      - STORAGE_URL=$BACKUP_STORAGE_URL
+      - SNAPSHOT_ID=$BACKUP_ID
     volumes:
       - backup:/config
       - unifi:/data/unifi
