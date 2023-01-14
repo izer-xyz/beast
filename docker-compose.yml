@@ -47,9 +47,7 @@ services:
       - TZ=$TZ
       - RUN_JOB_IMMEDIATELY=false
       - BACKUP_CRON=0 1 * * *
-    configs:
-      - source: duplicacy_preferences
-        target: /config/preferences
+      - FILTER_PATTERNS=+uisp/;+uisp/unms/;+uisp/unms/unms-backups/*;+uisp/unms/config-backups/*;-uisp/*;+unifi/;+unifi/backup/*;-unifi/*;-esp/.*
     volumes:
       - unifi:/data/unifi
       - uisp:/data/uisp
@@ -141,8 +139,6 @@ volumes:
 
 configs: 
   traefik_file_config:
-    external: true
-  duplicacy_preferences:
     external: true
 
 secrets:
