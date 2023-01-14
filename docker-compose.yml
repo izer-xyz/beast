@@ -41,7 +41,7 @@ services:
       traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
       
-  backupz:
+  backup:
     image: azinchen/duplicacy:latest
     environment:
       - TZ=$TZ
@@ -49,6 +49,7 @@ services:
       - BACKUP_CRON=0 1 * * *
       - FILTER_PATTERNS=+uisp/;+uisp/unms/;+uisp/unms/unms-backups/*;+uisp/unms/config-backups/*;-uisp/*;+unifi/;+unifi/backup/*;-unifi/*;-esp/.*
     volumes:
+      - backup:/config
       - unifi:/data/unifi
       - uisp:/data/uisp
       - hass:/data/hass
@@ -127,6 +128,7 @@ services:
       
 volumes:
   certz:
+  backup:
   restore:
   esp:
   uisp:
