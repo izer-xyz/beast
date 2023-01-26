@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   tailz:
-    image: tailscale/tailscale:v1.34
+    image: tailscale/tailscale:stable
     command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
     deploy:
       endpoint_mode: dnsrr
@@ -17,7 +17,7 @@ services:
       - tailz_data:/data
 
   socat:
-    image: alpine/socat:1.7.4.4-r0
+    image: alpine/socat:latest
     entrypoint: /entrypoint.sh
     deploy:
       endpoint_mode: dnsrr
@@ -27,7 +27,7 @@ services:
         mode: 0555 
   
   portainer:
-    image: portainer/portainer-ee:2.16.2-alpine
+    image: portainer/portainer-ee:alpine
     ports:
       - target: 9000
         published: 9000
