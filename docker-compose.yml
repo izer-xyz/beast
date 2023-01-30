@@ -150,6 +150,16 @@ services:
     labels:
       traefik.enable: 'true'
       
+  prom:
+    image: prom/prometheus:latest
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+    volumes:
+      - prometheus:/prometheus
+    labels:
+      traefik.enable: 'true'
+      
 volumes:
   certz:
   backup:
@@ -163,9 +173,12 @@ volumes:
       device: tmpfs
   hass:
   grafana:
+  prometheus:
 
 configs: 
   traefik_file_config:
+    external: true
+  prometheus_config:
     external: true
 
 secrets:
