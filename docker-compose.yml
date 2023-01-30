@@ -130,6 +130,26 @@ services:
       traefik.enable: 'true'
       traefik.http.services.hass.loadbalancer.server.port: 8123
       
+  dash:
+    image: grafana/grafana-oss:latest
+    volumes:
+      - grafana:/var/lib/grafana
+    labels:
+      traefik.enable: 'true'
+      
+  mon: 
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro 
+      - /var/lib/docker/:/mnt/docker:ro
+    devices:
+      - /dev/kmsg
+    labels:
+      traefik.enable: 'true'
+      
 volumes:
   certz:
   backup:
@@ -141,7 +161,8 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
-  hass: 
+  hass:
+  grafana:
 
 configs: 
   traefik_file_config:
