@@ -85,6 +85,8 @@ services:
 
   uisp:
     image: nico640/docker-unms:1.5.7
+    deploy:
+      endpoint_mode: dnsrr
     ports:
       - target: 2055
         published: 2055
@@ -145,6 +147,8 @@ services:
       
   mon: 
     image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
     privileged: true
@@ -160,6 +164,8 @@ services:
       
   prom:
     image: prom/prometheus:latest
+    deploy:
+      endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
     configs:
