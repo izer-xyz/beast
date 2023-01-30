@@ -103,6 +103,8 @@ services:
   unifi:
     image: jacobalberty/unifi:v7.3
     user: unifi
+    environment:
+      - TZ=$TZ
     ports:
       - target: 3478
         published: 3478
@@ -122,6 +124,8 @@ services:
   hass:
     image: homeassistant/raspberrypi4-64-homeassistant:stable
     privileged: true
+    environment:
+      - TZ=$TZ
     devices:
       - /dev/*:/dev/*
     volumes:
@@ -132,6 +136,8 @@ services:
       
   dash:
     image: grafana/grafana-oss:latest
+    environment:
+      - TZ=$TZ
     volumes:
       - grafana:/var/lib/grafana
     labels:
@@ -139,6 +145,8 @@ services:
       
   mon: 
     image: gcr.io/cadvisor/cadvisor:v0.47.1
+    environment:
+      - TZ=$TZ
     privileged: true
     volumes:
       - /:/rootfs:ro
@@ -152,6 +160,8 @@ services:
       
   prom:
     image: prom/prometheus:latest
+    environment:
+      - TZ=$TZ
     configs:
       - source: prometheus_config
         target: /etc/prometheus/prometheus.yml
