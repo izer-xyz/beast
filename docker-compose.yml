@@ -84,7 +84,7 @@ services:
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
   uisp:
-    image: nico640/docker-unms:1.5.7
+    image: nico640/docker-unms:1.6.5
     deploy:
       endpoint_mode: dnsrr
     ports:
