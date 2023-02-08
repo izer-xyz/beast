@@ -177,7 +177,7 @@ services:
       traefik.enable: 'true'
       
   collectd-exporter:
-    image: prom/collectd-exporter:latest
+    image: prom/collectd-exporter:master
     command: --collectd.listen-address=":25826"
     ports:
       - target: 25826
