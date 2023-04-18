@@ -189,7 +189,7 @@ services:
     environment:
       - TZ=$TZ
    
-   speed:
+  speed:
     image: openspeedtest/latest
     environment:
       - TZ=$TZ
