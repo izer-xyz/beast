@@ -84,7 +84,7 @@ services:
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
   uisp:
-    image: nico640/docker-unms:1.6.5
+    image: nico640/docker-unms:1.7.5
     deploy:
       endpoint_mode: dnsrr
     ports:
@@ -188,7 +188,19 @@ services:
       endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
-      
+   
+   speed:
+    image: openspeedtest/latest
+    environment:
+      - TZ=$TZ
+    ports:
+      - target: 3000
+        published: 3000
+        mode: 'host'
+      - target: 3001
+        published: 3001
+        mode: 'host'
+        
 volumes:
   certz:
   backup:
