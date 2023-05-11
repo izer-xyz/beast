@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   proxz:
-    image: traefik:2.9
+    image: traefik:2.10
     ports:
       - target: 443
         published: 443 
@@ -84,7 +84,7 @@ services:
       traefik.http.services.esp.loadbalancer.server.port: '6052'
 
   uisp:
-    image: nico640/docker-unms:1.7.5
+    image: nico640/docker-unms:latest
     deploy:
       endpoint_mode: dnsrr
     ports:
@@ -103,7 +103,7 @@ services:
       traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
 
   unifi:
-    image: jacobalberty/unifi:v7.3
+    image: jacobalberty/unifi:v7
     user: unifi
     environment:
       - TZ=$TZ
