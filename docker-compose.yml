@@ -2,20 +2,6 @@ version: '3.8'
 
 services:
 
-  remote:
-    image: tailscale/tailscale:stable
-    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
-    deploy:
-      endpoint_mode: dnsrr
-    environment:
-      - TS_EXTRA_ARGS=--hostname=remote
-      - TS_DEST_IP=10.0.0.9
-      - TS_STATE_DIR=/data/
-    secrets: 
-      - tailscale_auth_key
-    volumes:
-      - tailz_data:/data
-      
   proxz:
     image: traefik:2.10
     ports:
@@ -229,7 +215,6 @@ volumes:
   hass:
   grafana:
   prometheus:
-  tailz_data:
 
 configs: 
   traefik_file_config:
@@ -242,5 +227,4 @@ secrets:
     external: true
   duplicacy_preferences:
     external: true
-  tailscale_auth_key:
-    external: true
+  
