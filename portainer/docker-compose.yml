@@ -4,7 +4,7 @@ services:
 
   tailz:
     image: tailscale/tailscale:stable
-    command: /bin/sh -c "TS_AUTH_KEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
+    command: /bin/sh -c "TS_AUTHKEY=$$(cat /run/secrets/tailscale_auth_key) /usr/local/bin/containerboot"
     deploy:
       endpoint_mode: dnsrr
     environment:
