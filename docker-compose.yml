@@ -237,7 +237,7 @@ services:
       traefik.tcp.routers.smtps.service: 'smtps'
       
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
-      traefik.tcp.routers.sieve.entrypoints: 'sieve'
+      traefik.tcp.routers.sieve.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.sieve.service: 'sieve'
       
     volumes:
