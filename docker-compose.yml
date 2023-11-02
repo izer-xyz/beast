@@ -11,11 +11,27 @@ services:
       - target: 80
         published: 80 
         mode: host
+      - target: 25
+        published: 25
+        mode: host
+      - target: 465
+        published: 465
+        mode: host
+      - target: 458
+        published: 458
+        mode: host
+      - target: 4190
+        published: 4190
+        mode: host
     environment:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
       - TRAEFIK_API=true
       - TRAEFIK_SERVERSTRANSPORT_INSECURESKIPVERIFY=true
+      - TRAEFIK_ENTRYPOINTS_smtp_ADDRESS=:25
+      - TRAEFIK_ENTRYPOINTS_smtps_ADDRESS=:465
+      - TRAEFIK_ENTRYPOINTS_msa_ADDRESS=:587
+      - TRAEFIK_ENTRYPOINTS_sieve_ADDRESS=:4190
       - TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
       - TRAEFIK_ENTRYPOINTS_http_HTTP_REDIRECTIONS_ENTRYPOINT_TO=https
       - TRAEFIK_ENTRYPOINTS_https_ADDRESS=:443
