@@ -252,7 +252,7 @@ services:
       traefik.tcp.routers.sieve.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.sieve.entrypoints: 'sieve'
       traefik.tcp.routers.sieve.service: 'sieve'
-      traefik.tcp.routers.sieve.tls: true
+      traefik.tcp.routers.sieve.tls: 'true'
       
     volumes:
       - mail:/opt/stalwart-mail        
