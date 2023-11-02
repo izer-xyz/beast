@@ -236,25 +236,25 @@ services:
       traefik.http.routers.mail.entrypoints: 'https'
       
       traefik.tcp.services.smtp.loadbalancer.server.port: 25
-      traefik.tcp.routers.smtp.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.smtp.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.smtp.entrypoints: 'smtp'
       traefik.tcp.routers.smtp.service: 'smtp'
       traefik.tcp.routers.smtp.tls.certresolver: 'letsencrypt'
       
       traefik.tcp.services.msa.loadbalancer.server.port: 587
-      traefik.tcp.routers.msa.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.msa.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.msa.entrypoints: 'msa'
       traefik.tcp.routers.msa.service: 'msa'
       traefik.tcp.routers.msa.tls.certresolver: 'letsencrypt'
       
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
-      traefik.tcp.routers.smtps.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.smtps.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.smtps.entrypoints: 'smtps'
       traefik.tcp.routers.smtps.service: 'smtps'
       traefik.tcp.routers.smtps.tls.certresolver: 'letsencrypt'
       
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
-      traefik.tcp.routers.sieve.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.sieve.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.sieve.entrypoints: 'sieve'
       traefik.tcp.routers.sieve.service: 'sieve'
       traefik.tcp.routers.sieve.tls.certresolver: 'letsencrypt'
