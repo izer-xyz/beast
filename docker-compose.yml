@@ -86,6 +86,7 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.http.services.restore.loadbalancer.server.port: 3875
+      traefik.http.routers.restore.entrypoints: 'https'
 
   esp:
     image: esphome/esphome:latest
@@ -98,6 +99,7 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.http.services.esp.loadbalancer.server.port: '6052'
+      traefik.http.routers.esp.entrypoints: 'https'
 
   uisp:
     image: nico640/docker-unms:latest
@@ -117,6 +119,7 @@ services:
       traefik.enable: 'true'
       traefik.http.services.uisp.loadbalancer.server.port: 443
       traefik.http.services.uisp.loadbalancer.server.scheme: 'https'
+      traefik.http.routers.uisp.entrypoints: 'https'
 
   unifi:
     image: jacobalberty/unifi:v7
@@ -138,6 +141,7 @@ services:
       traefik.enable: 'true'
       traefik.http.services.unifi.loadbalancer.server.port: 8443
       traefik.http.services.unifi.loadbalancer.server.scheme: 'https'
+      traefik.http.routers.unifi.entrypoints: 'https'
 
   hass:
     image: homeassistant/raspberrypi4-64-homeassistant:stable
@@ -151,6 +155,7 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.http.services.hass.loadbalancer.server.port: 8123
+      traefik.http.routers.hass.entrypoints: 'https'
       
   dash:
     image: grafana/grafana-oss:latest
@@ -160,6 +165,7 @@ services:
       - grafana:/var/lib/grafana
     labels:
       traefik.enable: 'true'
+      traefik.http.routers.dash.entrypoints: 'https'
       
   mon: 
     image: gcr.io/cadvisor/cadvisor:v0.47.1
@@ -177,6 +183,7 @@ services:
       - /dev/kmsg
     labels:
       traefik.enable: 'true'
+      traefik.http.routers.mon.entrypoints: 'https'
       
   prom:
     image: prom/prometheus:latest
@@ -191,6 +198,7 @@ services:
       - prometheus:/prometheus
     labels:
       traefik.enable: 'true'
+      traefik.http.routers.prom.entrypoints: 'https'
       
   collectd-exporter:
     image: prom/collectd-exporter:master
@@ -226,10 +234,12 @@ services:
       traefik.http.routers.mail.entrypoints: 'https'
       
       traefik.tcp.services.smtp.loadbalancer.server.port: 25
+      traefik.tcp.routers.smtp.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.smtp.entrypoints: 'smtp'
       traefik.tcp.routers.smtp.service: 'smtp'
       
       traefik.tcp.services.msa.loadbalancer.server.port: 587
+      traefik.tcp.routers.msa.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.msa.entrypoints: 'msa'
       traefik.tcp.routers.msa.service: 'msa'
       
@@ -240,7 +250,9 @@ services:
       
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
       traefik.tcp.routers.sieve.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.sieve.entrypoints: 'sieve'
       traefik.tcp.routers.sieve.service: 'sieve'
+      traefik.tcp.routers.sieve.tls: true
       
     volumes:
       - mail:/opt/stalwart-mail        
