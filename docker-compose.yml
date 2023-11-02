@@ -217,21 +217,21 @@ services:
         published: 3001
         mode: 'host'
         
-   mail:
+  mail:
     image: stalwartlabs/mail-server:latest
     labels:
       traefik.enable: 'true'
       
       traefik.tcp.services.smtp.loadbalancer.server.port: 25
-      traefik.tcp.routers.smtp.entrypoints: smtp
+      traefik.tcp.routers.smtp.entrypoints: 'smtp'
       
       traefik.tcp.services.msa.loadbalancer.server.port: 587
-      traefik.tcp.routers.msa.entrypoints: msa
+      traefik.tcp.routers.msa.entrypoints: 'msa'
       
-      traefik.tcp.routers.smtps.entrypoints: smtps
+      traefik.tcp.routers.smtps.entrypoints: 'smtps'
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
       
-      traefik.tcp.routers.sieve.entrypoints: sieve
+      traefik.tcp.routers.sieve.entrypoints: 'sieve'
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
       
     volumes:
