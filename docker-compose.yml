@@ -232,12 +232,13 @@ services:
       traefik.tcp.routers.msa.entrypoints: 'msa'
       traefik.tcp.routers.msa.service: 'msa'
       
-      traefik.tcp.services.smtps.loadbalancer.server.port: 465
+      traefik.tcp.routers.smtps.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.smtps.entrypoints: 'smtps'
       traefik.tcp.routers.smtps.service: 'smtps'
       
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
       traefik.tcp.routers.sieve.rule: 'HostSNI(`*`)'
+      traefik.tcp.routers.sieve.entrypoints: 'sieve'
       traefik.tcp.routers.sieve.service: 'sieve'
       
     volumes:
