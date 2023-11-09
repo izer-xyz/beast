@@ -93,6 +93,9 @@ services:
   esp:
     image: esphome/esphome:latest
     command: ["-q", "dashboard", "/config"]
+    deploy:
+      restart_policy:
+        condition: none
     environment:
       - TZ=$TZ
       - ESPHOME_DASHBOARD_USE_PING=true
@@ -173,6 +176,8 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.47.1
     deploy:
       endpoint_mode: dnsrr
+      restart_policy:
+        condition: none
     environment:
       - TZ=$TZ
     privileged: true
@@ -191,6 +196,8 @@ services:
     image: prom/prometheus:latest
     deploy:
       endpoint_mode: dnsrr
+      restart_policy:
+        condition: none
     environment:
       - TZ=$TZ
     configs:
@@ -205,6 +212,9 @@ services:
   collectd-exporter:
     image: prom/collectd-exporter:master
     command: --collectd.listen-address=":25826"
+    deploy:
+      restart_policy:
+        condition: none
     ports:
       - target: 25826
         published: 25826
@@ -214,7 +224,7 @@ services:
       endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
-   
+        
   speed:
     image: openspeedtest/latest
     environment:
