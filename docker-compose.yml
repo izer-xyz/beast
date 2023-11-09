@@ -94,6 +94,7 @@ services:
     image: esphome/esphome:latest
     command: ["-q", "dashboard", "/config"]
     deploy:
+      mode: replicated
       replicas: 0
       restart_policy:
         condition: none
@@ -177,6 +178,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.47.1
     deploy:
       endpoint_mode: dnsrr
+      mode: replicated
       replicas: 0
       restart_policy:
         condition: none
@@ -198,6 +200,7 @@ services:
     image: prom/prometheus:latest
     deploy:
       endpoint_mode: dnsrr
+      mode: replicated
       replicas: 0
       restart_policy:
         condition: none
@@ -216,6 +219,7 @@ services:
     image: prom/collectd-exporter:master
     command: --collectd.listen-address=":25826"
     deploy:
+      mode: replicated
       replicas: 0
       restart_policy:
         condition: none
