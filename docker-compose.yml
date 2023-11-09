@@ -94,6 +94,7 @@ services:
     image: esphome/esphome:latest
     command: ["-q", "dashboard", "/config"]
     deploy:
+      replicas: 0
       restart_policy:
         condition: none
     environment:
@@ -176,6 +177,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.47.1
     deploy:
       endpoint_mode: dnsrr
+      replicas: 0
       restart_policy:
         condition: none
     environment:
@@ -196,6 +198,7 @@ services:
     image: prom/prometheus:latest
     deploy:
       endpoint_mode: dnsrr
+      replicas: 0
       restart_policy:
         condition: none
     environment:
@@ -213,6 +216,7 @@ services:
     image: prom/collectd-exporter:master
     command: --collectd.listen-address=":25826"
     deploy:
+      replicas: 0
       restart_policy:
         condition: none
     ports:
