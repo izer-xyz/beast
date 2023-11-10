@@ -245,6 +245,14 @@ services:
         published: 3001
         mode: 'host'
         
+  certdumper:
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    volumes:
+      - certz:/traefik:ro
+      - certz:/output:rw
+    environment:
+      - DOMAIN=$mailserver
+    
   mail:
     image: stalwartlabs/mail-server:latest
     labels:
@@ -257,7 +265,6 @@ services:
       traefik.tcp.routers.smtp.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.smtp.entrypoints: 'smtp'
       traefik.tcp.routers.smtp.service: 'smtp'
-      traefik.tcp.routers.smtp.tls.certresolver: 'letsencrypt'
       
       traefik.tcp.services.msa.loadbalancer.server.port: 587
       traefik.tcp.routers.msa.rule: 'HostSNI(`$mailserver`)'
@@ -279,6 +286,7 @@ services:
       
     volumes:
       - mail:/opt/stalwart-mail        
+      - certz:/opt/stalwart-mail/etc/certs/
       
 volumes:
   certz:
