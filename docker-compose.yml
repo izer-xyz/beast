@@ -247,6 +247,11 @@ services:
         
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: none
     volumes:
       - certz:/traefik:ro
       - certz:/output:rw
