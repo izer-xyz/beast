@@ -247,6 +247,7 @@ services:
         
   certdumper:
     image: ldez/traefik-certs-dumper:v2.8.1
+    command: ["--domain-subdir", "--crt-name=fullchain", "--key-name=privkey"]
     entrypoint: sh -c '
       apk add jq
       ; while ! [ -e /data/acme.json ]
