@@ -246,15 +246,17 @@ services:
         mode: 'host'
         
   certdumper:
-    image: ghcr.io/kereis/traefik-certs-dumper:latest
-    deploy:
-      mode: replicated
-      replicas: 1
-      restart_policy:
-        condition: none
+    image: ldez/traefik-certs-dumper:v2.8.1
+    entrypoint: sh -c '
+      apk add jq
+      ; while ! [ -e /data/acme.json ]
+      || ! [ `jq ".[] | .Certificates | length" /data/acme.json` != 0 ]; do
+      sleep 1
+      ; done
+      && traefik-certs-dumper file --version v2 --watch
+      --source /data/acme.json --dest /data'
     volumes:
-      - certz:/traefik:ro
-      - certz:/output:rw
+      - certz:/data
     environment:
       - DOMAIN=$mailserver
     
