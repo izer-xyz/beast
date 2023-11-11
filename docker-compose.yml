@@ -264,6 +264,7 @@ services:
     image: stalwartlabs/mail-server:latest
     labels:
       traefik.enable: 'true'
+      # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
       traefik.http.services.mail.loadbalancer.server.port: 8080
       traefik.http.routers.mail.entrypoints: 'https'
       traefik.tcp.services.smtp.loadbalancer.server.port: 25
