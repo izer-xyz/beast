@@ -253,9 +253,10 @@ services:
       sleep 1
       ; done
       && traefik-certs-dumper file --version v2 --watch
-      --source /data/acme.json --dest /data --domain-subdir --crt-name=fullchain --key-name=privkey'
+      --source /data/acme.json --dest /output/etc/certs --domain-subdir --crt-name=fullchain --key-name=privkey'
     volumes:
-      - certz:/data
+      - certz:/data:ro
+      - mail:/output:rw 
     environment:
       - DOMAIN=$mailserver
     
@@ -285,8 +286,7 @@ services:
       traefik.tcp.routers.sieve.service: 'sieve'
       traefik.tcp.routers.sieve.tls.certresolver: 'letsencrypt'
     volumes:
-      - mail:/opt/stalwart-mail        
-      - certz:/opt/stalwart-mail/etc/certs/
+      - mail:/opt/stalwart-mail
       
 volumes:
   certz:
