@@ -289,6 +289,24 @@ services:
     volumes:
       - mail:/opt/stalwart-mail
       
+  users:
+    image: lldap/lldap:stable
+    deploy:
+      endpoint_mode: dnsrr
+    environment:
+      - TZ=$TZ
+      - LLDAP_JWT_SECRET_FILE=/run/secrets/LLDAP_JWT_SECRET
+      - LLDAP_LDAP_USER_PASS_FILE=/run/secrets/LLDAP_LDAP_USER_PASS
+      - LLDAP_LDAP_BASE_DN=$base_dn
+    secrets:
+      - LLDAP_JWT_SECRET
+      - LLDAP_LDAP_USER_PASS
+    volumes:
+      - users:/data
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.mon.entrypoints: 'https' 
+      
 volumes:
   certz:
   backup:
@@ -304,6 +322,7 @@ volumes:
   grafana:
   prometheus:
   mail:
+  users:
 
 configs: 
   traefik_file_config:
@@ -315,5 +334,9 @@ secrets:
   cloudflare_api_token:
     external: true
   duplicacy_preferences:
+    external: true
+  LLDAP_JWT_SECRET:
+    external: true
+  LLDAP_LDAP_USER_PASS:
     external: true
   
