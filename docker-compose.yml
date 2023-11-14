@@ -305,7 +305,7 @@ services:
       - users:/data
     labels:
       traefik.enable: 'true'
-      traefik.http.routers.mon.entrypoints: 'https' 
+      traefik.http.routers.users.entrypoints: 'https' 
       
 volumes:
   certz:
