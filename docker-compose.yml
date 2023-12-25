@@ -319,14 +319,14 @@ services:
         target: /etc/promtail/config.yml
 
   syslog: 
-    image: balabit/syslog-ng:latest
+    image: lscr.io/linuxserver/syslog-ng:latest
     ports:
       - target: 514
         published: 514
         mode: 'host'
     configs:
       - source: syslog_ng_config
-        target: /etc/syslog-ng/syslog-ng.conf
+        target: /config
 
 volumes:
   certz:
