@@ -308,6 +308,20 @@ services:
       traefik.http.routers.users.entrypoints: 'https' 
       traefik.http.services.users.loadbalancer.server.port: 17170
       
+  promtail:
+    image: grafana/promtail:latest
+    environment:
+      - TZ=$TZ
+    ports:
+      - target: 514
+        published: 514
+        mode: 'host'
+    configs:
+      - source: promtail_config
+        target: /etc/promtail/docker-config.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
 volumes:
   certz:
   backup:
@@ -329,6 +343,8 @@ configs:
   traefik_file_config:
     external: true
   prometheus_config:
+    external: true
+  promtail_config:
     external: true
 
 secrets:
