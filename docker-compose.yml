@@ -318,7 +318,7 @@ services:
         mode: 'host'
     configs:
       - source: promtail_config
-        target: /etc/promtail/docker-config.yml
+        target: /etc/promtail/config.yml
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       
