@@ -317,6 +317,8 @@ services:
     configs:
       - source: promtail_config
         target: /etc/promtail/config.yml
+    volumes:
+      - /mnt/docker/containers:/var/lib/docker/containers:ro
 
   syslog: 
     image: lscr.io/linuxserver/syslog-ng:latest
