@@ -326,7 +326,7 @@ services:
         mode: 'host'
     configs:
       - source: syslog_ng_config
-        target: /config
+        target: /config/syslog-ng.conf
 
 volumes:
   certz:
