@@ -310,18 +310,24 @@ services:
       
   promtail:
     image: grafana/promtail:latest
+    deploy:
+      endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
+    configs:
+      - source: promtail_config
+        target: /etc/promtail/config.yml
+
+  syslog: 
+    image: balabit/syslog-ng:latest
     ports:
       - target: 514
         published: 514
         mode: 'host'
     configs:
-      - source: promtail_config
-        target: /etc/promtail/config.yml
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      
+      - source: syslog_ng_config
+        target: /etc/syslog-ng/syslog-ng.conf
+
 volumes:
   certz:
   backup:
@@ -345,6 +351,8 @@ configs:
   prometheus_config:
     external: true
   promtail_config:
+    external: true
+  syslog_ng_config:
     external: true
 
 secrets:
