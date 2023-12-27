@@ -314,21 +314,15 @@ services:
       endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
+    ports:
+      - target: 1514
+        published: 1514
+        mode: 'host'
     configs:
       - source: promtail_config
         target: /etc/promtail/config.yml
     volumes:
       - /mnt/docker/containers:/var/lib/docker/containers:ro
-
-  syslog: 
-    image: lscr.io/linuxserver/syslog-ng:latest
-    ports:
-      - target: 514
-        published: 514
-        mode: 'host'
-    configs:
-      - source: syslog_ng_config
-        target: /config/syslog-ng.conf
 
 volumes:
   certz:
