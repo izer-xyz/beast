@@ -315,7 +315,7 @@ services:
     environment:
       - TZ=$TZ
     ports:
-      - target: 1514
+      - target: 514
         published: 1514
         mode: 'host'
     configs:
