@@ -129,7 +129,7 @@ services:
       traefik.http.routers.uisp.entrypoints: 'https'
 
   unifi:
-    image: jacobalberty/unifi:v7
+    image: jacobalberty/unifi:v8
     user: unifi
     environment:
       - TZ=$TZ
@@ -254,6 +254,11 @@ services:
       ; done
       && traefik-certs-dumper file --version v2 --watch
       --source /data/acme.json --dest /output/etc/certs --domain-subdir --crt-name=fullchain --key-name=privkey'
+    deploy:
+      mode: replicated
+      replicas: 0
+      restart_policy:
+        condition: none
     volumes:
       - certz:/data:ro
       - mail:/output:rw 
@@ -262,6 +267,11 @@ services:
     
   mail:
     image: stalwartlabs/mail-server:latest
+    deploy:
+      mode: replicated
+      replicas: 0
+      restart_policy:
+        condition: none
     labels:
       traefik.enable: 'true'
       # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
@@ -293,6 +303,10 @@ services:
     image: lldap/lldap:stable
     deploy:
       endpoint_mode: dnsrr
+      mode: replicated
+      replicas: 0
+      restart_policy:
+        condition: none
     environment:
       - TZ=$TZ
       - LLDAP_JWT_SECRET_FILE=/run/secrets/LLDAP_JWT_SECRET
