@@ -338,6 +338,27 @@ services:
     volumes:
       - /mnt/docker/containers:/var/lib/docker/containers:ro
 
+  mqtt:
+    image: eclipse-mosquitto
+    deploy:
+      endpoint_mode: dnsrr
+    environment:
+      - TZ=$TZ
+    ports:
+      - target: 1883
+        published: 1883
+        mode: 'host'
+      - target: 9001
+        published: 9001
+        mode: 'host'
+    configs:
+      - source: mqtt_config
+        target: /mosquitto/config/mosquitto.conf
+    secrets:
+      - mqtt_passwd # /run/secrets/mqtt_passwd
+    volumes:
+      - mqtt:/etc/mosquitto
+      
 volumes:
   certz:
   backup:
@@ -354,6 +375,7 @@ volumes:
   prometheus:
   mail:
   users:
+  mqtt:
 
 configs: 
   traefik_file_config:
@@ -364,6 +386,8 @@ configs:
     external: true
   syslog_ng_config:
     external: true
+  mqtt_config:
+    external: true
 
 secrets:
   cloudflare_api_token:
@@ -373,5 +397,7 @@ secrets:
   LLDAP_JWT_SECRET:
     external: true
   LLDAP_LDAP_USER_PASS:
+    external: true
+  mqtt_passwd:
     external: true
   
