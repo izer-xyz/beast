@@ -376,6 +376,7 @@ services:
     ports:
       - target: 2055
         published: 12055
+        protocol: 'udp'
         mode: 'host'
     environment:
       - TZ=$TZ
