@@ -361,7 +361,7 @@ services:
       #  target: /config.yml
         
   ntopng:
-    image: ntop/ntopng:stable
+    image: phantomski/ntopng:latest
     deploy:
       endpoint_mode: dnsrr
     environment:
