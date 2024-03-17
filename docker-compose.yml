@@ -114,7 +114,7 @@ services:
       endpoint_mode: dnsrr
     ports:
       - target: 2055
-        published: 2055
+        published: 12055
         protocol: 'udp'
         mode: 'host'
     environment:
@@ -375,7 +375,7 @@ services:
       endpoint_mode: dnsrr
     ports:
       - target: 2055
-        published: 12055
+        published: 2055
         protocol: 'udp'
         mode: 'host'
     environment:
