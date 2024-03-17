@@ -360,18 +360,14 @@ services:
       #- source: mqtt_io_config
       #  target: /config.yml
         
-  ntopng:
-    image: phantomski/ntopng:latest
-    deploy:
-      endpoint_mode: dnsrr
-    environment:
-      - TZ=$TZ
-    volumes:
-      - ntopng_redis:/var/lib/redis
-    command: [ '-i', 'tcp://probe:5556', '--disable-login' ]
-    labels:
-      traefik.enable: 'true'
-      traefik.http.routers.ntopng.entrypoints: 'https'
+  #ntopng:
+    #image: phantomski/ntopng:latest
+    #volumes:
+    #  - ntopng_redis:/var/lib/redis
+    #command: [ '-i', 'tcp://probe:5556', '--disable-login' ]
+    #labels:
+    #  traefik.enable: 'true'
+    #  traefik.http.routers.ntopng.entrypoints: 'https'
       
   probe:
     image: synfinatic/netflow2ng:latest
