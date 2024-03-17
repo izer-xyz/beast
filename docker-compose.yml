@@ -353,6 +353,34 @@ services:
     configs:
       - source: mqtt_io_config
         target: /config.yml
+
+   ntopng:
+    image: ntop/ntopng:stable
+    deploy:
+      endpoint_mode: dnsrr
+    environment:
+      - TZ=$TZ
+    volumes:
+      - ntopng_redis:/var/lib/redis
+    command: [ '-i', 'tcp://probe:5556', '--disable-login' ]
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.ntopng.entrypoints: 'https'
+      
+  probe:
+    image: synfinatic/netflow2ng:latest
+    deploy:
+      endpoint_mode: dnsrr
+    ports:
+      - target: 2055
+        published: 12055
+        mode: 'host'
+    environment:
+      - TZ=$TZ
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.probe.entrypoints: 'https'
+      traefik.http.services.probe.loadbalancer.server.port: 8080
       
 volumes:
   certz:
@@ -370,6 +398,7 @@ volumes:
   prometheus:
   mail:
   users:
+  ntopng_redis:
 
 configs: 
   traefik_file_config:
