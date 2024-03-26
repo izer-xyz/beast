@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   proxz:
-    image: traefik:2.10
+    image: traefik:2.11
     ports:
       - target: 443
         published: 443 
