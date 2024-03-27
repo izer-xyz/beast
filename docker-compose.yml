@@ -300,7 +300,7 @@ services:
       - mail:/opt/stalwart-mail
       
   users:
-    image: lldap/lldap:stable
+    image: lldap/lldap:latest
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
