@@ -256,7 +256,7 @@ services:
       --source /data/acme.json --dest /output/etc/certs --domain-subdir --crt-name=fullchain --key-name=privkey'
     deploy:
       mode: replicated
-      replicas: 0
+      #replicas: 0
       restart_policy:
         condition: none
     volumes:
