@@ -201,7 +201,7 @@ services:
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
-      replicas: 0
+      #replicas: 0
       restart_policy:
         condition: none
     environment:
@@ -221,7 +221,7 @@ services:
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
-      replicas: 0
+      #replicas: 0
       restart_policy:
         condition: none
     ports:
