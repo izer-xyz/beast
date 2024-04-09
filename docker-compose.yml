@@ -269,7 +269,7 @@ services:
     image: stalwartlabs/mail-server:latest
     deploy:
       mode: replicated
-      replicas: 0
+      #replicas: 0
       restart_policy:
         condition: none
     labels:
