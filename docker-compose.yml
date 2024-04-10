@@ -286,11 +286,11 @@ services:
       traefik.tcp.routers.msa.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.msa.entrypoints: 'msa'
       traefik.tcp.routers.msa.service: 'msa'
-      traefik.tcp.services.imap.loadbalancer.server.port: 993
+      traefik.tcp.services.imap.loadbalancer.server.port: 143
       traefik.tcp.routers.imap.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.imap.entrypoints: 'imap'
       traefik.tcp.routers.imap.service: 'imap'
-      xtraefik.tcp.routers.msa.tls.certresolver: 'letsencrypt'
+      traefik.tcp.routers.imap.tls.certresolver: 'letsencrypt'
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
       xtraefik.tcp.routers.smtps.rule: 'HostSNI(`$mailserver`)'
       xtraefik.tcp.routers.smtps.entrypoints: 'smtps'
