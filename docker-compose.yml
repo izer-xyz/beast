@@ -14,6 +14,9 @@ services:
       - target: 25
         published: 25
         mode: host
+      - target: 993
+        published: 993
+        mode: host
       - target: 465
         published: 465
         mode: host
