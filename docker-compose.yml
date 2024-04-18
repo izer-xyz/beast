@@ -279,31 +279,36 @@ services:
     labels:
       traefik.enable: 'true'
       # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
+      
       traefik.http.services.mail.loadbalancer.server.port: 8080
       #traefik.http.services.mail.loadbalancer.proxyProtocol.version: 2
       traefik.http.routers.mail.entrypoints: 'https'
+      
       traefik.tcp.services.smtp.loadbalancer.server.port: 25
-      #traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version: 2
-      traefik.tcp.routers.smtp.rule: 'HostSNI(`$mailserver`)'
+      traefik.tcp.routers.smtp.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.smtp.entrypoints: 'smtp'
       traefik.tcp.routers.smtp.service: 'smtp'
+      
       traefik.tcp.services.msa.loadbalancer.server.port: 587
       #traefik.tcp.services.msa.loadbalancer.proxyProtocol.version: 2
-      traefik.tcp.routers.msa.rule: 'HostSNI(`$mailserver`)'
+      traefik.tcp.routers.msa.rule: 'HostSNI(`*`)'
       traefik.tcp.routers.msa.entrypoints: 'msa'
       traefik.tcp.routers.msa.service: 'msa'
+      
       traefik.tcp.services.imap.loadbalancer.server.port: 143
       #traefik.tcp.services.imap.loadbalancer.proxyProtocol.version: 2
       traefik.tcp.routers.imap.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.imap.entrypoints: 'imap'
       traefik.tcp.routers.imap.service: 'imap'
       traefik.tcp.routers.imap.tls.certresolver: 'letsencrypt'
+      
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
       #traefik.tcp.services.smtps.loadbalancer.proxyProtocol.version: 2
       xtraefik.tcp.routers.smtps.rule: 'HostSNI(`$mailserver`)'
       xtraefik.tcp.routers.smtps.entrypoints: 'smtps'
       xtraefik.tcp.routers.smtps.service: 'smtps'
       xtraefik.tcp.routers.smtps.tls.certresolver: 'letsencrypt'
+      
       traefik.tcp.services.sieve.loadbalancer.server.port: 4190
       traefik.tcp.routers.sieve.rule: 'HostSNI(`$mailserver`)'
       traefik.tcp.routers.sieve.entrypoints: 'sieve'
