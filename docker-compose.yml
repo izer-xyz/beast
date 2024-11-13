@@ -396,6 +396,7 @@ services:
       - git-config:/etc/gitea
     labels:
       traefik.enable: 'true'
+      traefik.http.services.git.loadbalancer.server.port: 3000
       traefik.http.routers.git.entrypoints: 'https'
       
 volumes:
