@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   proxz:
-    image: traefik:2.11
+    image: traefik:3
     ports:
       - target: 443
         published: 443 
@@ -116,6 +116,10 @@ services:
     image: nico640/docker-unms:latest
     deploy:
       endpoint_mode: dnsrr
+      mode: replicated
+      replicas: 0
+      restart_policy:
+        condition: none
     ports:
       - target: 2055
         published: 2055
@@ -378,6 +382,22 @@ services:
       #- source: mqtt_io_config
       #  target: /config.yml
       
+  git:
+    image: gitea/gitea:latest-rootless
+    restart: always
+    environment:
+      - TZ=$TZ
+    ports:
+      - target: 22
+        published: 2222
+        mode: 'host'
+    volumes:
+      - git:/var/lib/gitea
+      - git-config:/etc/gitea
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.git.entrypoints: 'https'
+      
 volumes:
   certz:
   backup:
@@ -394,6 +414,8 @@ volumes:
   prometheus:
   mail:
   users:
+  git:
+  git-config:
 
 configs: 
   traefik_file_config:
