@@ -80,6 +80,8 @@ services:
       - uisp:/data/uisp
       - hass:/data/hass
       - esp:/data/esp
+      - git:/data/git
+      - git-config:/data/git-config
       
   restore:
     image: saspus/duplicacy-web:latest
