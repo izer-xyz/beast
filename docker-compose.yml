@@ -388,7 +388,7 @@ services:
     environment:
       - TZ=$TZ
     ports:
-      - target: 22
+      - target: 2222
         published: 2222
         mode: 'host'
     volumes:
