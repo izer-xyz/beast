@@ -255,24 +255,15 @@ services:
         mode: 'host'
         
   certdumper:
-    image: ldez/traefik-certs-dumper:v2.8.1
-    entrypoint: sh -c '
-      apk add jq
-      ; while ! [ -e /data/acme.json ]
-      || ! [ `jq ".[] | .Certificates | length" /data/acme.json` != 0 ]; do
-      sleep 1
-      ; done
-      && traefik-certs-dumper file --version v2 --watch
-      --source /data/acme.json --dest /output/etc/certs --domain-subdir --crt-name=fullchain --key-name=privkey'
-    deploy:
-      mode: replicated
-      replicas: 0
-      restart_policy:
-        condition: none
+    image: ghcr.io/kereis/traefik-certs-dumper:latest
+    restart: unless-stopped
+    depends_on:
+      - proxz
     volumes:
-      - certz:/data:ro
-      - mail:/output:rw 
+      - certz:/traefik:ro
+      - mail:/output
     environment:
+      - TZ=$TZ
       - DOMAIN=$mailserver
     
   mail:
@@ -284,42 +275,37 @@ services:
         condition: none
     labels:
       traefik.enable: 'true'
-      # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
       
       traefik.http.services.mail.loadbalancer.server.port: 8080
       #traefik.http.services.mail.loadbalancer.proxyProtocol.version: 2
       traefik.http.routers.mail.entrypoints: 'https'
-      
-      traefik.tcp.services.smtp.loadbalancer.server.port: 25
-      traefik.tcp.routers.smtp.rule: 'HostSNI(`*`)'
+
+      traefik.tcp.routers.smtp.rule: HostSNI(`*`)
       traefik.tcp.routers.smtp.entrypoints: 'smtp'
       traefik.tcp.routers.smtp.service: 'smtp'
-      
-      traefik.tcp.services.msa.loadbalancer.server.port: 587
-      #traefik.tcp.services.msa.loadbalancer.proxyProtocol.version: 2
-      traefik.tcp.routers.msa.rule: 'HostSNI(`*`)'
-      traefik.tcp.routers.msa.entrypoints: 'msa'
-      traefik.tcp.routers.msa.service: 'msa'
-      
-      traefik.tcp.services.imap.loadbalancer.server.port: 143
-      #traefik.tcp.services.imap.loadbalancer.proxyProtocol.version: 2
-      traefik.tcp.routers.imap.rule: 'HostSNI(`$mailserver`)'
-      traefik.tcp.routers.imap.entrypoints: 'imap'
-      traefik.tcp.routers.imap.service: 'imap'
-      traefik.tcp.routers.imap.tls.certresolver: 'letsencrypt'
-      
+      traefik.tcp.services.smtp.loadbalancer.server.port: 25
+      traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version: 2
+
+      traefik.tcp.routers.jmap.rule: HostSNI(`*`)
+      traefik.tcp.routers.jmap.tls.passthrough: true
+      traefik.tcp.routers.jmap.entrypoints: 'https'
+      traefik.tcp.routers.jmap.service: 'jmap'
+      traefik.tcp.services.jmap.loadbalancer.server.port: 443
+      traefik.tcp.services.jmap.loadbalancer.proxyProtocol.version: 2
+
+      traefik.tcp.routers.smtps.rule: HostSNI(`*`)
+      traefik.tcp.routers.smtps.tls.passthrough: true
+      traefik.tcp.routers.smtps.entrypoints: 'smtps'
+      traefik.tcp.routers.smtps.service: 'smtps'
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
-      #traefik.tcp.services.smtps.loadbalancer.proxyProtocol.version: 2
-      xtraefik.tcp.routers.smtps.rule: 'HostSNI(`$mailserver`)'
-      xtraefik.tcp.routers.smtps.entrypoints: 'smtps'
-      xtraefik.tcp.routers.smtps.service: 'smtps'
-      xtraefik.tcp.routers.smtps.tls.certresolver: 'letsencrypt'
-      
-      traefik.tcp.services.sieve.loadbalancer.server.port: 4190
-      traefik.tcp.routers.sieve.rule: 'HostSNI(`$mailserver`)'
-      traefik.tcp.routers.sieve.entrypoints: 'sieve'
-      traefik.tcp.routers.sieve.service: 'sieve'
-      xtraefik.tcp.routers.sieve.tls.certresolver: 'letsencrypt'
+      traefik.tcp.services.smtps.loadbalancer.proxyProtocol.version: 2
+
+      traefik.tcp.routers.imaps.rule: HostSNI(`*`)
+      traefik.tcp.routers.imaps.tls.passthrough: true
+      traefik.tcp.routers.imaps.entrypoints: 'imaps'
+      traefik.tcp.routers.imaps.service: 'imaps'
+      traefik.tcp.services.imaps.loadbalancer.server.port: 993
+      traefik.tcp.services.imaps.loadbalancer.proxyProtocol.version: 2
     volumes:
       - mail:/opt/stalwart-mail
       
