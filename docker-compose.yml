@@ -287,21 +287,21 @@ services:
       traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version: 2
 
       traefik.tcp.routers.jmap.rule: HostSNI(`*`)
-      traefik.tcp.routers.jmap.tls.passthrough: true
+      traefik.tcp.routers.jmap.tls.passthrough: 'true'
       traefik.tcp.routers.jmap.entrypoints: 'https'
       traefik.tcp.routers.jmap.service: 'jmap'
       traefik.tcp.services.jmap.loadbalancer.server.port: 443
       traefik.tcp.services.jmap.loadbalancer.proxyProtocol.version: 2
 
       traefik.tcp.routers.smtps.rule: HostSNI(`*`)
-      traefik.tcp.routers.smtps.tls.passthrough: true
+      traefik.tcp.routers.smtps.tls.passthrough: 'true'
       traefik.tcp.routers.smtps.entrypoints: 'smtps'
       traefik.tcp.routers.smtps.service: 'smtps'
       traefik.tcp.services.smtps.loadbalancer.server.port: 465
       traefik.tcp.services.smtps.loadbalancer.proxyProtocol.version: 2
 
       traefik.tcp.routers.imaps.rule: HostSNI(`*`)
-      traefik.tcp.routers.imaps.tls.passthrough: true
+      traefik.tcp.routers.imaps.tls.passthrough: 'true'
       traefik.tcp.routers.imaps.entrypoints: 'imaps'
       traefik.tcp.routers.imaps.service: 'imaps'
       traefik.tcp.services.imaps.loadbalancer.server.port: 993
