@@ -264,7 +264,7 @@ services:
       - mail:/output
     environment:
       - TZ=$TZ
-      - DOMAIN=*.$domain
+      - DOMAIN=$domain
     
   mail:
     image: stalwartlabs/mail-server:latest
