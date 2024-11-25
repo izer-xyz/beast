@@ -309,7 +309,7 @@ services:
       - mail:/opt/stalwart-mail
       
   users:
-    image: lldap/lldap:stable
+    image: lldap/lldap:stable-alpine-rootless
     environment:
       - TZ=$TZ
       - LLDAP_JWT_SECRET_FILE=/run/secrets/LLDAP_JWT_SECRET
