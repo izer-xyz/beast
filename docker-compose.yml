@@ -281,8 +281,7 @@ services:
     labels:
       traefik.enable: 'true'
       
-      traefik.http.services.mail.loadbalancer.server.port: 443
-      traefik.http.services.mail.loadbalancer.server.scheme: 'https'
+      traefik.http.services.mail.loadbalancer.server.port: 8080
       traefik.http.routers.mail.entrypoints: 'https'
 
       traefik.tcp.routers.smtp.rule: HostSNI(`*`)
