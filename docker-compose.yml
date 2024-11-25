@@ -273,11 +273,6 @@ services:
     
   mail:
     image: stalwartlabs/mail-server:latest
-    deploy:
-      mode: replicated
-      #replicas: 0
-      restart_policy:
-        condition: none
     labels:
       traefik.enable: 'true'
       
@@ -315,12 +310,6 @@ services:
       
   users:
     image: lldap/lldap:latest
-    deploy:
-      endpoint_mode: dnsrr
-      mode: replicated
-      replicas: 1
-      restart_policy:
-        condition: none
     environment:
       - TZ=$TZ
       - LLDAP_JWT_SECRET_FILE=/run/secrets/LLDAP_JWT_SECRET
