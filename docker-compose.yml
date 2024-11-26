@@ -310,6 +310,12 @@ services:
       
   users:
     image: lldap/lldap:stable
+    deploy:
+      endpoint_mode: dnsrr
+    ports:
+      - target: 3890
+        published: 3890
+        mode: 'host'
     environment:
       - TZ=$TZ
       - LLDAP_JWT_SECRET_FILE=/run/secrets/LLDAP_JWT_SECRET
