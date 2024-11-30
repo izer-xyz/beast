@@ -386,6 +386,11 @@ services:
       traefik.http.services.git.loadbalancer.server.port: 3000
       traefik.http.routers.git.entrypoints: 'https'
       
+      traefik.http.routers.jmap-client.rule: Host(`m.$domain`)
+      traefik.http.routers.jmap-client.entrypoints: 'https'
+      traefik.http.routers.jmap-client.middlewares: 'jmap-prefix@docker'
+      traefik.http.middlewares.jmap-prefix.addprefix.prefix: '/jmap/raw/branch/master'
+      
 volumes:
   certz:
   backup:
