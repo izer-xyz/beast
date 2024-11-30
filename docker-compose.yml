@@ -388,7 +388,7 @@ services:
       
       traefik.http.routers.jmap-client.rule: Host(`m.$domain`)
       traefik.http.routers.jmap-client.entrypoints: 'https'
-      traefik.http.routers.jmap-client.middlewares: 'jmap-prefix@docker,no-content-type@docker,sniff@docker'
+      traefik.http.routers.jmap-client.middlewares: 'jmap-prefix@docker,no-content-type@docker'
       traefik.http.middlewares.jmap-prefix.addprefix.prefix: '/sinegar/jmap/raw/branch/master'
       traefik.http.middlewares.no-content-type.headers.customresponseheaders.content-type: ''
       traefik.http.middlewares.no-content-type.headers.customresponseheaders.x-content-type-options: ''
