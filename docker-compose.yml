@@ -371,7 +371,8 @@ services:
       
   git:
     image: gitea/gitea:latest-rootless
-    restart: always
+    deploy:
+      endpoint_mode: dnsrr
     environment:
       - TZ=$TZ
     ports:
@@ -386,13 +387,19 @@ services:
       traefik.http.services.git.loadbalancer.server.port: 3000
       traefik.http.routers.git.entrypoints: 'https'
       
+  raw:
+    image: caddy:latest
+    environment:
+      - TZ=$TZ
+    volumes:
+      - caddy:/etc/caddy
+    labels:
+      traefik.enable: 'true'
+      traefik.http.services.raw.loadbalancer.server.port: 80
+      traefik.http.routers.raw.entrypoints: 'https'    
       traefik.http.routers.jmap-client.rule: Host(`m.$domain`)
-      traefik.http.routers.jmap-client.entrypoints: 'https'
-      traefik.http.routers.jmap-client.middlewares: 'jmap-prefix@docker,no-content-type@docker'
-      traefik.http.middlewares.jmap-prefix.addprefix.prefix: '/sinegar/jmap/raw/branch/master'
-      traefik.http.middlewares.no-content-type.headers.customresponseheaders.content-type: ''
-      traefik.http.middlewares.no-content-type.headers.customresponseheaders.x-content-type-options: ''
-      
+      traefik.http.routers.jmap-client.entrypoints: 'https' 
+
 volumes:
   certz:
   backup:
@@ -411,6 +418,7 @@ volumes:
   users:
   git:
   git-config:
+  caddy:
 
 configs: 
   traefik_file_config:
