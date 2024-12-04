@@ -388,7 +388,7 @@ services:
       traefik.http.routers.git.entrypoints: 'https'
       
   raw:
-    image: ghcr.io/izer-xyz/gitea-pages:latest
+    image: caddy:latest
     environment:
       - TZ=$TZ
       - GITEA_HOST=git:3000
