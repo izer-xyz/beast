@@ -388,12 +388,10 @@ services:
       traefik.http.routers.git.entrypoints: 'https'
       
   raw:
-    image: caddy:latest
+    image: ghcr.io/izer-xyz/gitea-pages:latest
     environment:
       - TZ=$TZ
       - GITEA_HOST=git:3000
-    volumes:
-      - caddy:/etc/caddy
     labels:
       traefik.enable: 'true'
       traefik.http.services.raw.loadbalancer.server.port: 80
