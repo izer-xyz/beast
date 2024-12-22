@@ -11,9 +11,9 @@ services:
       - target: 80
         published: 80 
         mode: host
-      - target: 25
-        published: 25
-        mode: host
+      #- target: 25
+      #  published: 25
+      #  mode: host
       - target: 993
         published: 993
         mode: host
@@ -35,8 +35,8 @@ services:
       - TRAEFIK_SERVERSTRANSPORT_INSECURESKIPVERIFY=true
       - TRAEFIK_ENTRYPOINTS_imap_ADDRESS=:993
       - TRAEFIK_ENTRYPOINTS_imap_PROXYPROTOCOL_TRUSTEDIPS=10.0.0.0/8
-      - TRAEFIK_ENTRYPOINTS_smtp_ADDRESS=:25
-      - TRAEFIK_ENTRYPOINTS_smtp_PROXYPROTOCOL_TRUSTEDIPS=10.0.0.0/8
+      # - TRAEFIK_ENTRYPOINTS_smtp_ADDRESS=:25
+      # - TRAEFIK_ENTRYPOINTS_smtp_PROXYPROTOCOL_TRUSTEDIPS=10.0.0.0/8
       - TRAEFIK_ENTRYPOINTS_smtps_ADDRESS=:465
       - TRAEFIK_ENTRYPOINTS_smtps_PROXYPROTOCOL_TRUSTEDIPS=10.0.0.0/8
       - TRAEFIK_ENTRYPOINTS_msa_ADDRESS=:587
@@ -273,17 +273,21 @@ services:
     
   mail:
     image: stalwartlabs/mail-server:latest
+    ports:
+      - target: 25
+        published: 25 
+        mode: host
     labels:
       traefik.enable: 'true'
       
       traefik.http.services.mail.loadbalancer.server.port: 8080
       traefik.http.routers.mail.entrypoints: 'https'
 
-      traefik.tcp.routers.smtp.rule: HostSNI(`*`)
-      traefik.tcp.routers.smtp.entrypoints: 'smtp'
-      traefik.tcp.routers.smtp.service: 'smtp'
-      traefik.tcp.services.smtp.loadbalancer.server.port: 25
-      traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version: 2
+      # traefik.tcp.routers.smtp.rule: HostSNI(`*`)
+      # traefik.tcp.routers.smtp.entrypoints: 'smtp'
+      # traefik.tcp.routers.smtp.service: 'smtp'
+      # traefik.tcp.services.smtp.loadbalancer.server.port: 25
+      # traefik.tcp.services.smtp.loadbalancer.proxyProtocol.version: 2
 
       traefik.tcp.routers.jmap.rule: HostSNI(`*`)
       traefik.tcp.routers.jmap.tls.passthrough: 'true'
