@@ -402,7 +402,26 @@ services:
       traefik.http.routers.raw.entrypoints: 'https'    
       traefik.http.routers.jmap-client.rule: Host(`m.$domain`)
       traefik.http.routers.jmap-client.entrypoints: 'https' 
-
+      
+  dns:
+    image: pihole/pihole:latest
+    ports:
+      - target: 53
+        published: 53
+        mode: 'host'
+      - target: 53
+        published: 53
+        protocol: 'udp'
+        mode: 'host'
+    environment:
+      - TZ=$TZ
+    volumes:
+      - pihole:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.dns.entrypoints: 'https'
+      
 volumes:
   certz:
   backup:
@@ -422,6 +441,8 @@ volumes:
   git:
   git-config:
   caddy:
+  pihole:
+  dnsmasq:
 
 configs: 
   traefik_file_config:
