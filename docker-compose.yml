@@ -418,7 +418,7 @@ services:
       - VIRTUAL_HOST=dns.$domain
       - REV_SERVER=yes
       - REV_SERVER_TARGET=10.0.0.1
-      - REV_SERVER_CIDR=10.0.0.0/16
+      - REV_SERVER_CIDR=10.0.0.0/8
       - REV_SERVER_DOMAIN=$domain
       - INTERFACE=eth1
     volumes:
