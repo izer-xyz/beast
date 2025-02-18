@@ -4,6 +4,7 @@ services:
 
   proxz:
     image: traefik:3
+    hostname: proxz
     ports:
       - target: 443
         published: 443 
@@ -405,6 +406,7 @@ services:
       
   dns:
     image: pihole/pihole:latest
+    hostname: dns
     ports:
       - target: 53
         published: 53
@@ -415,12 +417,6 @@ services:
         mode: 'host'
     environment:
       - TZ=$TZ
-      #- VIRTUAL_HOST=dns.$domain
-      #- REV_SERVER=yes
-      #- REV_SERVER_TARGET=10.0.0.1
-      #- REV_SERVER_CIDR=10.0.0.0/8
-      #- REV_SERVER_DOMAIN=$domain
-      #- INTERFACE=eth1
       - FTLCONF_dns_interface=eth1
       - FTLCONF_dns_revServers=true,10.0.0.0/8,10.0.0.1,$domain
       - FTLCONF_webserver_domain=dns.$domain
