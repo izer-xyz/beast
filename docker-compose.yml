@@ -65,6 +65,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - certz:/etc/certz
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.routers.api.service: 'api@internal'
@@ -99,6 +101,8 @@ services:
       - USR_ID=3875
     volumes:
       - restore:/config
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.restore.loadbalancer.server.port: 3875
@@ -118,6 +122,8 @@ services:
       - ESPHOME_DASHBOARD_USE_PING=true
     volumes:
       - esp:/config
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.esp.loadbalancer.server.port: '6052'
@@ -142,6 +148,8 @@ services:
       - QUIET_MODE=1
     volumes:
       - uisp:/config
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.uisp.loadbalancer.server.port: 443
@@ -165,6 +173,8 @@ services:
     volumes:
       - unifi:/unifi/data
       - unifi-log:/unifi/logs
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.unifi.loadbalancer.server.port: 8443
@@ -181,6 +191,8 @@ services:
       - /dev/*:/dev/*
     volumes:
       - hass:/config
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.hass.loadbalancer.server.port: 8123
@@ -193,6 +205,8 @@ services:
       - TZ=$TZ
     volumes:
       - grafana:/var/lib/grafana
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.routers.dash.entrypoints: 'https'
@@ -214,6 +228,8 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro 
       - /var/lib/docker/:/mnt/docker:ro
+    networks:
+      - proxz
     devices:
       - /dev/kmsg
     labels:
@@ -236,6 +252,8 @@ services:
         target: /etc/prometheus/prometheus.yml
     volumes:
       - prometheus:/prometheus
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.routers.prom.entrypoints: 'https'
@@ -325,6 +343,8 @@ services:
       traefik.tcp.services.imaps.loadbalancer.proxyProtocol.version: 2
     volumes:
       - mail:/opt/stalwart-mail
+    networks:
+      - proxz
       
   users:
     image: lldap/lldap:stable
@@ -345,6 +365,8 @@ services:
       - LLDAP_LDAP_USER_PASS
     volumes:
       - users:/data
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.routers.users.entrypoints: 'https' 
@@ -405,6 +427,8 @@ services:
     volumes:
       - git:/var/lib/gitea
       - git-config:/etc/gitea
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.git.loadbalancer.server.port: 3000
@@ -416,6 +440,8 @@ services:
     environment:
       - TZ=$TZ
       - GITEA_HOST=git:3000
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.raw.loadbalancer.server.port: 80
@@ -442,6 +468,8 @@ services:
     volumes:
       - pihole:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.dns.loadbalancer.server.port: 80
@@ -458,6 +486,8 @@ services:
       - RTC_CONFIG=false # Set to the path of a file that specifies the STUN/TURN servers.
       - DEBUG_MODE=false # Set to true to debug container and peer connections.
       - TZ=$TZ
+    networks:
+      - proxz
     labels:
       traefik.enable: 'true'
       traefik.http.services.drop.loadbalancer.server.port: 3000
@@ -506,4 +536,8 @@ secrets:
     external: true
   LLDAP_LDAP_USER_PASS:
     external: true
+
+networks:
+  proxz:
+    driver: overlay
   
