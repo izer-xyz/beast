@@ -71,6 +71,7 @@ services:
       
   backup:
     image: azinchen/duplicacy:latest
+    hostname: backup
     environment:
       - TZ=$TZ
       - RUN_JOB_IMMEDIATELY=false
@@ -91,6 +92,7 @@ services:
       
   restore:
     image: saspus/duplicacy-web:latest
+    hostname: restore
     environment:
       - TZ=$TZ
       - GRP_ID=3875
@@ -104,6 +106,7 @@ services:
 
   esp:
     image: esphome/esphome:latest
+    hostname: esp
     command: ["-q", "dashboard", "/config"]
     deploy:
       mode: replicated
@@ -122,6 +125,7 @@ services:
 
   uisp:
     image: nico640/docker-unms:latest
+    hostname: uisp
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
@@ -146,6 +150,7 @@ services:
 
   unifi:
     image: jacobalberty/unifi:v8
+    hostname: unifi
     user: unifi
     environment:
       - TZ=$TZ
@@ -168,6 +173,7 @@ services:
 
   hass:
     image: homeassistant/raspberrypi4-64-homeassistant:stable
+    hostname: hass
     privileged: true
     environment:
       - TZ=$TZ
@@ -182,6 +188,7 @@ services:
       
   dash:
     image: grafana/grafana-oss:latest
+    hostname: dash
     environment:
       - TZ=$TZ
     volumes:
@@ -192,6 +199,7 @@ services:
       
   mon: 
     image: gcr.io/cadvisor/cadvisor:v0.47.1
+    hostname: mon
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
@@ -214,6 +222,7 @@ services:
       
   prom:
     image: prom/prometheus:latest
+    hostname: prom
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
@@ -233,6 +242,7 @@ services:
       
   collectd-exporter:
     image: prom/collectd-exporter:master
+    hostname: collectd-exporter
     command: --collectd.listen-address=":25826"
     deploy:
       endpoint_mode: dnsrr
@@ -250,6 +260,7 @@ services:
         
   speed:
     image: openspeedtest/latest
+    hostname: speed
     environment:
       - TZ=$TZ
     ports:
@@ -262,6 +273,7 @@ services:
         
   certdumper:
     image: ghcr.io/kereis/traefik-certs-dumper:latest
+    hostname: certdumper
     restart: unless-stopped
     depends_on:
       - proxz
@@ -274,6 +286,7 @@ services:
     
   mail:
     image: stalwartlabs/mail-server:latest
+    hostname: mail
     ports:
       - target: 25
         published: 25 
@@ -315,6 +328,7 @@ services:
       
   users:
     image: lldap/lldap:stable
+    hostname: users
     deploy:
       endpoint_mode: dnsrr
     ports:
@@ -338,6 +352,7 @@ services:
       
   promtail:
     image: grafana/promtail:latest
+    hostname: promtail
     deploy:
       endpoint_mode: dnsrr
     environment:
@@ -354,6 +369,7 @@ services:
 
   mqtt:
     image: eclipse-mosquitto
+    hostname: mqtt
     command: mosquitto -c /mosquitto-no-auth.conf
     deploy:
       endpoint_mode: dnsrr
@@ -362,6 +378,7 @@ services:
       
   mqtt_io:
     image: flyte/mqtt-io
+    hostname: mqtt-io
     deploy:
       endpoint_mode: dnsrr
       mode: replicated
@@ -376,6 +393,7 @@ services:
       
   git:
     image: gitea/gitea:latest-rootless
+    hostname: git
     deploy:
       endpoint_mode: dnsrr
     environment:
@@ -394,6 +412,7 @@ services:
       
   raw:
     image: ghcr.io/izer-xyz/gitea-pages:latest
+    hostname: raw
     environment:
       - TZ=$TZ
       - GITEA_HOST=git:3000
@@ -430,6 +449,7 @@ services:
 
   drop:
     image: lscr.io/linuxserver/pairdrop:latest
+    hostname: drop
     environment:
       - PUID=1000 # UID to run the application as
       - PGID=1000 # GID to run the application as
