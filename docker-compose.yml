@@ -182,7 +182,7 @@ services:
       traefik.http.routers.unifi.entrypoints: 'https'
 
   hass:
-    image: homeassistant/raspberrypi4-64-homeassistant:stable
+    image: homeassistant/aarch64-homeassistant:stable
     hostname: hass
     privileged: true
     environment:
