@@ -511,12 +511,13 @@ services:
       - proxz
     labels:
       traefik.enable: 'true'
+      traefik.http.routers.id.entrypoints: 'https'
+      traefik.http.services.id.loadbalancer.server.port: 3000
+      
       traefik.http.routers.id-api.entrypoints: 'https'
       traefik.http.routers.id-api.rule: 'Host(`id.$domain`) && (PathPrefix(`/api/`) || PathPrefix(`/.well-known/`))'
       traefik.http.routers.id-api.service: 'id-api'
       traefik.http.services.id-api.loadbalancer.server.port: 8080
-      traefik.http.routers.id.entrypoints: 'https'
-      traefik.http.services.id.loadbalancer.server.port: 3000
       
 volumes:
   certz:
