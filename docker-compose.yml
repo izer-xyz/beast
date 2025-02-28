@@ -512,6 +512,7 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.http.routers.id.entrypoints: 'https'
+      traefik.http.routers.id.rule: 'Host(`id.$domain`)'
       traefik.http.services.id.loadbalancer.server.port: 3000
       
       traefik.http.routers.id-api.entrypoints: 'https'
