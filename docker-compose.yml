@@ -493,6 +493,33 @@ services:
       traefik.http.services.drop.loadbalancer.server.port: 3000
       traefik.http.routers.drop.entrypoints: 'https'
       
+  id:
+    image: ghcr.io/pocket-id/pocket-id:latest
+    hostname: id
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=$TZ
+      - PUBLIC_APP_URL=https://id.$domain
+      - MAXMIND_LICENSE_KEY=eZ8zwu_xTFl0ZgetyourownpleaseY_mmk
+      - CADDY_DISABLED=true
+      - HOST=0.0.0.0
+      - TRUST_PROXY=true
+    volumes:
+      - id:/app/backend/data
+    networks:
+      - proxz
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.id.entrypoints: 'https'
+      traefik.http.routers.id.rule: 'Host(`id.$domain`) && (PathPrefix(`/api/`) || PathPrefix(`/.well-known/`))'
+      traefik.http.routers.id-api.service: 'id-api'
+      traefik.http.services.pocket-id-backend-service.loadbalancer.server.port: 8080
+      traefik.http.routers.pocket-id-frontend-router.entrypoints: 'https'
+      traefik.http.routers.pocket-id-frontend-router.rule: 'Host(`pocket-id.domain.example.com`)'
+      traefik.http.routers.pocket-id-frontend-router.service: 'pocket-id-frontend-service'
+      traefik.http.services.pocket-id-frontend-service.loadbalancer.server.port: 3000
+      
 volumes:
   certz:
   backup:
