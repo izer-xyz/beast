@@ -514,11 +514,9 @@ services:
       traefik.http.routers.id.entrypoints: 'https'
       traefik.http.routers.id.rule: 'Host(`id.$domain`) && (PathPrefix(`/api/`) || PathPrefix(`/.well-known/`))'
       traefik.http.routers.id-api.service: 'id-api'
-      traefik.http.services.pocket-id-backend-service.loadbalancer.server.port: 8080
-      traefik.http.routers.pocket-id-frontend-router.entrypoints: 'https'
-      traefik.http.routers.pocket-id-frontend-router.rule: 'Host(`pocket-id.domain.example.com`)'
-      traefik.http.routers.pocket-id-frontend-router.service: 'pocket-id-frontend-service'
-      traefik.http.services.pocket-id-frontend-service.loadbalancer.server.port: 3000
+      traefik.http.services.ip-api.loadbalancer.server.port: 8080
+      traefik.http.routers.id: 'https'
+      traefik.http.services.id.loadbalancer.server.port: 3000
       
 volumes:
   certz:
@@ -541,6 +539,7 @@ volumes:
   caddy:
   pihole:
   dnsmasq:
+  id:
 
 configs: 
   traefik_file_config:
