@@ -437,6 +437,10 @@ services:
   raw:
     image: ghcr.io/izer-xyz/gitea-pages:latest
     hostname: raw
+    ports:
+      - target: 80
+        published: 8888
+        mode: 'host'
     environment:
       - TZ=$TZ
       - GITEA_HOST=git:3000
