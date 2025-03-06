@@ -437,6 +437,8 @@ services:
   raw:
     image: ghcr.io/izer-xyz/gitea-pages:latest
     hostname: raw
+    deploy:
+      endpoint_mode: dnsrr
     ports:
       - target: 80
         published: 8888
