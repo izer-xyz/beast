@@ -157,7 +157,7 @@ services:
       traefik.http.routers.uisp.entrypoints: 'https'
 
   unifi:
-    image: jacobalberty/unifi:v8
+    image: ghcr.io/jacobalberty/unifi-docker:v9
     hostname: unifi
     user: unifi
     environment:
