@@ -303,7 +303,7 @@ services:
       - DOMAIN=$domain
     
   mail:
-    image: stalwartlabs/mail-server:latest
+    image: stalwartlabs/stalwart:latest
     hostname: mail
     ports:
       - target: 25
@@ -342,7 +342,7 @@ services:
       traefik.tcp.services.imaps.loadbalancer.server.port: 993
       traefik.tcp.services.imaps.loadbalancer.proxyProtocol.version: 2
     volumes:
-      - mail:/opt/stalwart-mail
+      - mail:/opt/stalwart
     networks:
       - proxz
       
