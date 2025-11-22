@@ -531,7 +531,8 @@ services:
           "scopes": ["openid", "profile", "email"]
         }]
     volumes:
-      - docs:/app-data
+      - docs:/app/app-data
+      - docs-ingest:/app/ingestion
     networks:
       - proxz
     labels:
@@ -562,6 +563,7 @@ volumes:
   dnsmasq:
   id:
   docs:
+  docs-ingest:
 
 configs: 
   traefik_file_config:
