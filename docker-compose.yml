@@ -519,6 +519,7 @@ services:
       - TZ=$TZ
       - AUTH_SECRET=GkjSvfZn1exjcPk3UWdfGfkwji6viPNuAJOA3dVRQ6p0COpy
       - APP_BASE_URL=https://docs.$domain
+      - INGESTION_FOLDER_IS_ENABLED=true
     volumes:
       - docs:/app-data
     networks:
