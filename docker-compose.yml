@@ -522,12 +522,12 @@ services:
       - INGESTION_FOLDER_IS_ENABLED=true
       - |- 
         AUTH_PROVIDERS_CUSTOMS=[{
-          "providerId": "$domain",
-          "providerName": "$domain",
-          "clientId": "$docs-client-id",
-          "clientSecret": "$docs-client-secret",
+          "providerId": "${domain}",
+          "providerName": "${domain}",
+          "clientId": "${docs-client-id}",
+          "clientSecret": "${docs-client-secret}",
           "type": "oidc",
-          "discoveryUrl": "https://id.$domain/.well-known/openid-configuration",
+          "discoveryUrl": "https://id.${domain}/.well-known/openid-configuration",
           "scopes": ["openid", "profile", "email"]
         }]
     volumes:
