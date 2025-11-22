@@ -509,6 +509,24 @@ services:
       traefik.enable: 'true'
       traefik.http.routers.id.entrypoints: 'https'
       traefik.http.services.id.loadbalancer.server.port: 1411
+
+  docs:
+    image: ghcr.io/papra-hq/papra:latest
+    hostname: docs
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=$TZ
+      - AUTH_SECRET=GkjSvfZn1exjcPk3UWdfGfkwji6viPNuAJOA3dVRQ6p0COpy
+      - APP_BASE_URL=https://docs.$domain
+    volumes:
+      - docs:/app-data
+    networks:
+      - proxz
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.docs.entrypoints: 'https'
+      traefik.http.services.docs.loadbalancer.server.port: 1221
       
 volumes:
   certz:
@@ -532,6 +550,7 @@ volumes:
   pihole:
   dnsmasq:
   id:
+  docs:
 
 configs: 
   traefik_file_config:
