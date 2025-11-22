@@ -524,8 +524,8 @@ services:
         AUTH_PROVIDERS_CUSTOMS=[{
           "providerId": "${domain}",
           "providerName": "${domain}",
-          "clientId": "${docs-client-id}",
-          "clientSecret": "${docs-client-secret}",
+          "clientId": "${docs_client_id}",
+          "clientSecret": "${docs_client_secret}",
           "type": "oidc",
           "discoveryUrl": "https://id.${domain}/.well-known/openid-configuration",
           "scopes": ["openid", "profile", "email"]
