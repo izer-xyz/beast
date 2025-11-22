@@ -521,7 +521,7 @@ services:
       - APP_BASE_URL=https://docs.$domain
       - INGESTION_FOLDER_IS_ENABLED=true
       - |- 
-        AUTH_PROVIDERS_CUSTOMS='[{
+        AUTH_PROVIDERS_CUSTOMS=[{
           "providerId": "$domain",
           "providerName": "$domain",
           "clientId": "$docs-client-id",
@@ -529,7 +529,7 @@ services:
           "type": "oidc",
           "discoveryUrl": "https://id.$domain/.well-known/openid-configuration",
           "scopes": ["openid", "profile", "email"]
-        }]'
+        }]
     volumes:
       - docs:/app-data
     networks:
