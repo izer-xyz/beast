@@ -91,6 +91,7 @@ services:
       - esp:/data/esp
       - git:/data/git
       - git-config:/data/git-config
+      - pics:/data/pics
       
   restore:
     image: saspus/duplicacy-web:latest
@@ -564,6 +565,7 @@ volumes:
   id:
   docs:
   docs-ingest:
+  pics:
 
 configs: 
   traefik_file_config:
