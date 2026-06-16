@@ -305,7 +305,7 @@ services:
       - DOMAIN=$domain
     
   mail:
-    image: stalwartlabs/stalwart:latest
+    image: stalwartlabs/stalwart:v0.15
     hostname: mail
     ports:
       - target: 25
